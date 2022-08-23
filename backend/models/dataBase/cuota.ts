@@ -1,11 +1,11 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 
-interface ICuota {
+export interface ICuota {
     numero: number;
     fecha: Date;
     importe: string;
-    estado: string;
-    poliza: Schema.Types.ObjectId;
+    estado: "A pagar" | "Vencida" | "Pagada";
+    poliza: Types.ObjectId;
 }
 
 const cuotaSchema = new Schema<ICuota>({
@@ -14,8 +14,10 @@ const cuotaSchema = new Schema<ICuota>({
     importe: { type: String, required: true },
     estado: { type: String, required: true },
     poliza: { type: Schema.Types.ObjectId, required: true, ref: "Poliza" }
-});
+},
+    {
+        collection: "cuota"
+    }
+);
 
-const Cuota = model<ICuota>('Cuota', cuotaSchema);
-
-export default Cuota;
+export const Cuota = model<ICuota>('Cuota', cuotaSchema);

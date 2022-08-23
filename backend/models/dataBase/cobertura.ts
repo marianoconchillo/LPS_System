@@ -1,10 +1,10 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 
-interface ICobertura {
+export interface ICobertura {
     codigoCobertura: string;
     precio: string;
-    vehiculos: Schema.Types.ObjectId[];
-    daños: Schema.Types.ObjectId[];
+    vehiculos: Types.ObjectId[];
+    daños: Types.ObjectId[];
 }
 
 const coberturaSchema = new Schema<ICobertura>({
@@ -12,8 +12,10 @@ const coberturaSchema = new Schema<ICobertura>({
     precio: { type: String, required: true },
     vehiculos: { type: [Schema.Types.ObjectId], required: true, ref: "TipoVehiculo" },
     daños: { type: [Schema.Types.ObjectId], required: true, ref: "Daño" }
-});
+},
+    {
+        collection: "cobertura"
+    }
+);
 
-const Cobertura = model<ICobertura>('Cobertura', coberturaSchema);
-
-export default Cobertura;
+export const Cobertura = model<ICobertura>('Cobertura', coberturaSchema);

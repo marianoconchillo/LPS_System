@@ -10,8 +10,10 @@ const dañoSchema = new Schema<IDaño>({
     nombre: { type: String, required: true, unique: true },
     porcentaje: { type: String, required: true },
     descripcion: { type: String, required: true },
-});
+},
+    {
+        collection: "daño"
+    }
+);
 
-const Daño = model<IDaño>('Daño', dañoSchema);
-
-export default Daño;
+export const Daño = model<IDaño>('Daño', dañoSchema);

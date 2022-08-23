@@ -12,8 +12,10 @@ const tipoVehiculoSchema = new Schema<ITipoVehiculo>({
     modelo: { type: String, required: true },
     año: { type: String, required: true },
     version: { type: String, required: true },
-});
+},
+    {
+        collection: "tipoVehiculo"
+    }
+);
 
-const TipoVehiculo = model<ITipoVehiculo>('TipoVehiculo', tipoVehiculoSchema);
-
-export default TipoVehiculo;
+export const TipoVehiculo = model<ITipoVehiculo>('TipoVehiculo', tipoVehiculoSchema);

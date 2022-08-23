@@ -1,12 +1,13 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 
-interface IPoliza {
+export interface IPoliza {
     numeroPoliza: number;
     fechaInicio: Date;
     fechaFin: Date;
-    productor: Schema.Types.ObjectId;
-    cliente: Schema.Types.ObjectId;
-    cobertura: Schema.Types.ObjectId;
+    productor: Types.ObjectId;
+    cliente: Types.ObjectId;
+    cobertura: Types.ObjectId;
+    vehiculoAsegurado: Types.ObjectId;
 }
 
 const polizaSchema = new Schema<IPoliza>({
@@ -15,9 +16,12 @@ const polizaSchema = new Schema<IPoliza>({
     fechaFin: { type: Date, required: true },
     productor: { type: Schema.Types.ObjectId, required: true, ref: "Productor" },
     cliente: { type: Schema.Types.ObjectId, required: true, ref: "Cliente" },
-    cobertura: { type: Schema.Types.ObjectId, required: true, ref: "Cobertura" }
-});
+    cobertura: { type: Schema.Types.ObjectId, required: true, ref: "Cobertura" },
+    vehiculoAsegurado: { type: Schema.Types.ObjectId, required: true, ref: "VehiculoAsegurado" },
+},
+    {
+        collection: "poliza"
+    }
+);
 
-const Poliza = model<IPoliza>('Poliza', polizaSchema);
-
-export default Poliza;
+export const Poliza = model<IPoliza>('Poliza', polizaSchema);

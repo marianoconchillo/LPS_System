@@ -13,8 +13,8 @@ const clienteSchema = new Schema<ICliente>({
     apellido: { type: String, required: true },
     dni: { type: String, required: true, unique: true },
     email: { type: String, required: true },
-});
+},
+    { collection: "cliente" }
+);
 
-const Cliente = model<ICliente>('Cliente', clienteSchema);
-
-export default Cliente;
+export const Cliente = model<ICliente>('Cliente', clienteSchema);

@@ -9,6 +9,7 @@ const server_1 = __importDefault(require("./models/server"));
 dotenv_1.default.config();
 // Conectamos a la base de datos
 (0, db_1.default)();
+// importData();
 // Creamos el servidor
 const server = new server_1.default();
 server.listen();

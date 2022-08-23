@@ -1,9 +1,9 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Types } from 'mongoose';
 import Persona from './persona';
 
 export interface IProductor extends Persona {
     numeroProductor: number;
-    sucursal: Schema.Types.ObjectId;
+    sucursal: Types.ObjectId;
 }
 
 const productorSchema = new Schema<IProductor>({
@@ -13,8 +13,10 @@ const productorSchema = new Schema<IProductor>({
     apellido: { type: String, required: true },
     dni: { type: String, required: true, unique: true },
     email: { type: String, required: true }
-});
+},
+    {
+        collection: "productor"
+    }
+);
 
-const Productor = model<IProductor>('Productor', productorSchema);
-
-export default Productor;
+export const Productor = model<IProductor>('Productor', productorSchema);
