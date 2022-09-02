@@ -9,21 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = require("mongoose");
-require("../models/dataBase/productor");
-require("../models/dataBase/sucursal");
-require("../models/dataBase/poliza");
-require("../models/dataBase/cliente");
-require("../models/dataBase/vehiculoAsegurado");
-const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const db = yield (0, mongoose_1.connect)(process.env.MONGO_URI || "");
-        console.log(`MongoDB Connected: ${db.connection.host}`);
+exports.getPoliza = void 0;
+const poliza_1 = require("../models/dataBase/poliza");
+// @desc    Get Póliza
+// @route   GET /api/poliza/:id
+// @access  Private
+const getPoliza = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const poliza = yield poliza_1.Poliza.findOne({ numeroPoliza: id })
+        .populate("productor")
+        .populate("cliente")
+        .populate("vehiculoAsegurado");
+    if (poliza) {
+        res.json(poliza);
     }
-    catch (error) {
-        console.log(error);
-        process.exit(1);
+    else {
+        res.status(404).json({
+            msg: `No existe póliza número ${id}`
+        });
     }
 });
-exports.default = connectDB;
-//# sourceMappingURL=db.js.map
+exports.getPoliza = getPoliza;
+//# sourceMappingURL=poliza.js.map

@@ -9,21 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = require("mongoose");
-require("../models/dataBase/productor");
-require("../models/dataBase/sucursal");
-require("../models/dataBase/poliza");
-require("../models/dataBase/cliente");
-require("../models/dataBase/vehiculoAsegurado");
-const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const db = yield (0, mongoose_1.connect)(process.env.MONGO_URI || "");
-        console.log(`MongoDB Connected: ${db.connection.host}`);
+exports.getSucursal = void 0;
+const sucursal_1 = require("../models/dataBase/sucursal");
+// @desc    Get Sucursal
+// @route   GET /api/sucursales/:id
+// @access  Private
+const getSucursal = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    console.log(id);
+    const sucursal = yield sucursal_1.Sucursal.findById(id);
+    if (sucursal) {
+        res.json(sucursal);
     }
-    catch (error) {
-        console.log(error);
-        process.exit(1);
+    else {
+        res.status(404).json({
+            msg: `No existe sucursal`
+        });
     }
 });
-exports.default = connectDB;
-//# sourceMappingURL=db.js.map
+exports.getSucursal = getSucursal;
+//# sourceMappingURL=sucursales.js.map

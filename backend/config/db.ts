@@ -1,4 +1,9 @@
 import { connect } from "mongoose";
+require("../models/dataBase/productor");
+require("../models/dataBase/sucursal");
+require("../models/dataBase/poliza");
+require("../models/dataBase/cliente");
+require("../models/dataBase/vehiculoAsegurado");
 
 const connectDB = async () => {
     try {

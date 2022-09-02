@@ -1,15 +1,30 @@
 import express, { Application } from "express";
 import cors from "cors";
+import clienteRoutes from "../routes/clientes";
+import productorRoutes from "../routes/productores";
+import polizaRoutes from "../routes/poliza";
 
 class Server {
 
     private app: Application;
     private port: string;
+    private apiPaths = {
+        clientes: "/api/clientes",
+        productores: "/api/productores",
+        polizas: "/api/polizas",
+    }
 
     constructor() {
         this.app = express();
-        this.middlewares();
         this.port = process.env.PORT || "5000";
+        this.middlewares();
+        this.routes();
+    }
+
+    routes() {
+        this.app.use(this.apiPaths.clientes, clienteRoutes);
+        this.app.use(this.apiPaths.productores, productorRoutes);
+        this.app.use(this.apiPaths.polizas, polizaRoutes);
     }
 
     middlewares() {

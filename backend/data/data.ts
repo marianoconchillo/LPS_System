@@ -1,10 +1,8 @@
 import { Types } from "mongoose";
-
 import { ICliente } from "../models/dataBase/cliente";
 import { ICobertura } from "../models/dataBase/cobertura";
-import { ICuota } from "../models/dataBase/cuota";
 import { IDaño } from "../models/dataBase/daño";
-import { IPoliza } from "../models/dataBase/poliza";
+import { EstadoCuota, IPoliza } from "../models/dataBase/poliza";
 import { IProductor } from "../models/dataBase/productor";
 import { ISucursal } from "../models/dataBase/sucursal";
 import { ITipoVehiculo } from "../models/dataBase/tipoVehiculo";
@@ -74,12 +72,24 @@ export const poliza: IPoliza = {
     productor: new Types.ObjectId(),
     cobertura: new Types.ObjectId(),
     vehiculoAsegurado: new Types.ObjectId(),
-}
-
-export const cuota: ICuota = {
-    numero: 1,
-    estado: "A pagar",
-    fecha: new Date("2022-09-23"),
-    importe: "2500",
-    poliza: new Types.ObjectId(),
+    cuotas: [
+        {
+            numero: 1,
+            estado: EstadoCuota.pagada,
+            fecha: new Date("2022-09-23"),
+            importe: "2500"
+        },
+        {
+            numero: 2,
+            estado: EstadoCuota.pagar,
+            fecha: new Date("2022-09-23"),
+            importe: "2500"
+        },
+        {
+            numero: 3,
+            estado: EstadoCuota.pagar,
+            fecha: new Date("2022-09-23"),
+            importe: "2500"
+        },
+    ]
 }

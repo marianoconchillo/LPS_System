@@ -9,21 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = require("mongoose");
-require("../models/dataBase/productor");
-require("../models/dataBase/sucursal");
-require("../models/dataBase/poliza");
-require("../models/dataBase/cliente");
-require("../models/dataBase/vehiculoAsegurado");
-const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const db = yield (0, mongoose_1.connect)(process.env.MONGO_URI || "");
-        console.log(`MongoDB Connected: ${db.connection.host}`);
+exports.getCuotas = void 0;
+const cuota_1 = require("../models/dataBase/cuota");
+// @desc    Get Cuotas
+// @route   GET /api/cuotas/:id
+// @access  Private
+const getCuotas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const cuotas = yield cuota_1.Cuota.find().populate({
+        path: "poliza",
+        match: { numeroPoliza: id },
+    });
+    console.log(cuotas);
+    if (cuotas.length > 0) {
+        res.json(cuotas);
     }
-    catch (error) {
-        console.log(error);
-        process.exit(1);
+    else {
+        res.status(404).json({
+            msg: `No existen cuotas para póliza número ${id}`
+        });
     }
 });
-exports.default = connectDB;
-//# sourceMappingURL=db.js.map
+exports.getCuotas = getCuotas;
+//# sourceMappingURL=cuota.js.map

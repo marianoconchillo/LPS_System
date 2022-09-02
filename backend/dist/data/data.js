@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.cuota = exports.poliza = exports.cobertura = exports.vehiculoAsegurado = exports.productor = exports.cliente = exports.tipoVehiculo = exports.daño = exports.sucursal = void 0;
+exports.poliza = exports.cobertura = exports.vehiculoAsegurado = exports.productor = exports.cliente = exports.tipoVehiculo = exports.daño = exports.sucursal = void 0;
 const mongoose_1 = require("mongoose");
+const poliza_1 = require("../models/dataBase/poliza");
 exports.sucursal = {
     numero: 1,
     direccion: "Antártida Argentina y Chile",
@@ -58,12 +59,25 @@ exports.poliza = {
     productor: new mongoose_1.Types.ObjectId(),
     cobertura: new mongoose_1.Types.ObjectId(),
     vehiculoAsegurado: new mongoose_1.Types.ObjectId(),
-};
-exports.cuota = {
-    numero: 1,
-    estado: "A pagar",
-    fecha: new Date("2022-09-23"),
-    importe: "2500",
-    poliza: new mongoose_1.Types.ObjectId(),
+    cuotas: [
+        {
+            numero: 1,
+            estado: poliza_1.EstadoCuota.pagada,
+            fecha: new Date("2022-09-23"),
+            importe: "2500"
+        },
+        {
+            numero: 2,
+            estado: poliza_1.EstadoCuota.pagar,
+            fecha: new Date("2022-09-23"),
+            importe: "2500"
+        },
+        {
+            numero: 3,
+            estado: poliza_1.EstadoCuota.pagar,
+            fecha: new Date("2022-09-23"),
+            importe: "2500"
+        },
+    ]
 };
 //# sourceMappingURL=data.js.map

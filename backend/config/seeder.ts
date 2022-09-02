@@ -1,13 +1,12 @@
-import { cliente, cobertura, cuota, daño, poliza, productor, sucursal, tipoVehiculo, vehiculoAsegurado } from "./data/data";
-import { Sucursal, ISucursal } from "./models/dataBase/sucursal";
-import { Daño, IDaño } from "./models/dataBase/daño";
-import { TipoVehiculo, ITipoVehiculo } from "./models/dataBase/tipoVehiculo";
-import { Cliente, ICliente } from "./models/dataBase/cliente";
-import { Productor, IProductor } from "./models/dataBase/productor";
-import { VehiculoAsegurado, IVehiculoAsegurado } from "./models/dataBase/vehiculoAsegurado";
-import { Cobertura, ICobertura } from "./models/dataBase/cobertura";
-import { Poliza, IPoliza } from "./models/dataBase/poliza";
-import { Cuota, ICuota } from "./models/dataBase/cuota";
+import { cliente, cobertura, daño, poliza, productor, sucursal, tipoVehiculo, vehiculoAsegurado } from "../data/data";
+import { Sucursal, ISucursal } from "../models/dataBase/sucursal";
+import { Daño, IDaño } from "../models/dataBase/daño";
+import { TipoVehiculo, ITipoVehiculo } from "../models/dataBase/tipoVehiculo";
+import { Cliente, ICliente } from "../models/dataBase/cliente";
+import { Productor, IProductor } from "../models/dataBase/productor";
+import { VehiculoAsegurado, IVehiculoAsegurado } from "../models/dataBase/vehiculoAsegurado";
+import { Cobertura, ICobertura } from "../models/dataBase/cobertura";
+import { Poliza, IPoliza } from "../models/dataBase/poliza";
 
 
 export const importData = async () => {
@@ -47,11 +46,7 @@ export const importData = async () => {
         poliza.cobertura = createdCobertura[0]._id;
         poliza.productor = createdProductor[0]._id;
         poliza.vehiculoAsegurado = createdVehiculoAsegurado[0]._id;
-        const createdPoliza = await Poliza.insertMany<IPoliza>(poliza);
-
-        // Inserto Cuota
-        cuota.poliza = createdPoliza[0]._id;
-        await Cuota.insertMany<ICuota>(cuota);
+        await Poliza.insertMany<IPoliza>(poliza);
 
     } catch (error) {
         console.error(error);
@@ -68,5 +63,4 @@ const deleteMany = async () => {
     await VehiculoAsegurado.deleteMany();
     await Cobertura.deleteMany();
     await Poliza.deleteMany();
-    await Cuota.deleteMany();
 }

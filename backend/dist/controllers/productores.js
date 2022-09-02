@@ -9,21 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = require("mongoose");
-require("../models/dataBase/productor");
-require("../models/dataBase/sucursal");
-require("../models/dataBase/poliza");
-require("../models/dataBase/cliente");
-require("../models/dataBase/vehiculoAsegurado");
-const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const db = yield (0, mongoose_1.connect)(process.env.MONGO_URI || "");
-        console.log(`MongoDB Connected: ${db.connection.host}`);
+exports.getProductor = void 0;
+const productor_1 = require("../models/dataBase/productor");
+// @desc    Get Productor
+// @route   GET /api/productores/:id
+// @access  Private
+const getProductor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const productor = yield productor_1.Productor.findOne({ numeroProductor: id }).populate("sucursal");
+    if (productor) {
+        res.json(productor);
     }
-    catch (error) {
-        console.log(error);
-        process.exit(1);
+    else {
+        res.status(404).json({
+            msg: `No existe productor con número de productor ${id}`
+        });
     }
 });
-exports.default = connectDB;
-//# sourceMappingURL=db.js.map
+exports.getProductor = getProductor;
+//# sourceMappingURL=productores.js.map

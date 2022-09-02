@@ -9,21 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = require("mongoose");
-require("../models/dataBase/productor");
-require("../models/dataBase/sucursal");
-require("../models/dataBase/poliza");
-require("../models/dataBase/cliente");
-require("../models/dataBase/vehiculoAsegurado");
-const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const db = yield (0, mongoose_1.connect)(process.env.MONGO_URI || "");
-        console.log(`MongoDB Connected: ${db.connection.host}`);
+exports.getCliente = void 0;
+const cliente_1 = require("../models/dataBase/cliente");
+// @desc    Get Cliente
+// @route   GET /api/clientes/:id
+// @access  Private
+const getCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const cliente = yield cliente_1.Cliente.findOne({ dni: id });
+    if (cliente) {
+        res.json(cliente);
     }
-    catch (error) {
-        console.log(error);
-        process.exit(1);
+    else {
+        res.status(404).json({
+            msg: `No existe usuario con dni ${id}`
+        });
     }
 });
-exports.default = connectDB;
-//# sourceMappingURL=db.js.map
+exports.getCliente = getCliente;
+//# sourceMappingURL=clientes.js.map
