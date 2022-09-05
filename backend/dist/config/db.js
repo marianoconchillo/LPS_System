@@ -14,7 +14,10 @@ require("../models/dataBase/productor");
 require("../models/dataBase/sucursal");
 require("../models/dataBase/poliza");
 require("../models/dataBase/cliente");
+require("../models/dataBase/cobertura");
 require("../models/dataBase/vehiculoAsegurado");
+require("../models/dataBase/tipoVehiculo");
+require("../models/dataBase/daño");
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const db = yield (0, mongoose_1.connect)(process.env.MONGO_URI || "");

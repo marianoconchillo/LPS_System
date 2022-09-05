@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const productores_1 = require("../controllers/productores");
+const polizas_1 = require("../controllers/polizas");
 const router = (0, express_1.Router)();
-router.get("/:numeroProductor", productores_1.getProductor);
+router.get("/:numeroPoliza", polizas_1.getPoliza);
 exports.default = router;
-//# sourceMappingURL=productores.js.map
+//# sourceMappingURL=polizas.js.map

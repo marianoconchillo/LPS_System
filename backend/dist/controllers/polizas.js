@@ -9,22 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProductor = void 0;
-const productor_1 = require("../models/dataBase/productor");
-// @desc    Get Productor
-// @route   GET /api/productores/:numeroProductor
+exports.getPoliza = void 0;
+const poliza_1 = require("../models/dataBase/poliza");
+// @desc    Get Póliza
+// @route   GET /api/polizas/:numeroPoliza
 // @access  Private
-const getProductor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { numeroProductor } = req.params;
-    const productor = yield productor_1.Productor.findOne({ numeroProductor }).populate("sucursal");
-    if (productor) {
-        res.json(productor);
+const getPoliza = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { numeroPoliza } = req.params;
+    const poliza = yield poliza_1.Poliza.findOne({ numeroPoliza })
+        .populate("productor")
+        .populate("cliente")
+        .populate("cobertura")
+        .populate("vehiculoAsegurado");
+    if (poliza) {
+        res.json(poliza);
     }
     else {
         res.status(404).json({
-            msg: `No existe productor con número de productor ${numeroProductor}`
+            msg: `No existe póliza número ${numeroPoliza}`
         });
     }
 });
-exports.getProductor = getProductor;
-//# sourceMappingURL=productores.js.map
+exports.getPoliza = getPoliza;
+//# sourceMappingURL=polizas.js.map

@@ -1,1 +1,1 @@
-{"version":3,"file":"productores.js","sourceRoot":"","sources":["../../routes/productores.ts"],"names":[],"mappings":";;AAAA,qCAAiC;AACjC,4DAA0D;AAE1D,MAAM,MAAM,GAAG,IAAA,gBAAM,GAAE,CAAC;AAExB,MAAM,CAAC,GAAG,CAAC,MAAM,EAAE,0BAAY,CAAC,CAAC;AAEjC,kBAAe,MAAM,CAAC"}
+{"version":3,"file":"productores.js","sourceRoot":"","sources":["../../routes/productores.ts"],"names":[],"mappings":";;AAAA,qCAAiC;AACjC,4DAA0D;AAE1D,MAAM,MAAM,GAAG,IAAA,gBAAM,GAAE,CAAC;AAExB,MAAM,CAAC,GAAG,CAAC,mBAAmB,EAAE,0BAAY,CAAC,CAAC;AAE9C,kBAAe,MAAM,CAAC"}

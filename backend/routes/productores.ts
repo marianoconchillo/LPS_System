@@ -3,6 +3,6 @@ import { getProductor } from "../controllers/productores";
 
 const router = Router();
 
-router.get("/:id", getProductor);
+router.get("/:numeroProductor", getProductor);
 
 export default router;

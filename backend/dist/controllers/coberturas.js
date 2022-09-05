@@ -9,22 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProductor = void 0;
-const productor_1 = require("../models/dataBase/productor");
-// @desc    Get Productor
-// @route   GET /api/productores/:numeroProductor
+exports.getCobertura = void 0;
+const cobertura_1 = require("../models/dataBase/cobertura");
+// @desc    Get Cobertura
+// @route   GET /api/coberturas/:codigoCobertura
 // @access  Private
-const getProductor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { numeroProductor } = req.params;
-    const productor = yield productor_1.Productor.findOne({ numeroProductor }).populate("sucursal");
-    if (productor) {
-        res.json(productor);
+const getCobertura = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { codigoCobertura } = req.params;
+    const cobertura = yield cobertura_1.Cobertura.findOne({ codigoCobertura })
+        .populate("vehiculos")
+        .populate("daños");
+    if (cobertura) {
+        res.json(cobertura);
     }
     else {
         res.status(404).json({
-            msg: `No existe productor con número de productor ${numeroProductor}`
+            msg: `No existe cobertura código ${codigoCobertura}`
         });
     }
 });
-exports.getProductor = getProductor;
-//# sourceMappingURL=productores.js.map
+exports.getCobertura = getCobertura;
+//# sourceMappingURL=coberturas.js.map

@@ -12,18 +12,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSucursal = void 0;
 const sucursal_1 = require("../models/dataBase/sucursal");
 // @desc    Get Sucursal
-// @route   GET /api/sucursales/:id
+// @route   GET /api/sucursales/:numero
 // @access  Private
 const getSucursal = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    console.log(id);
-    const sucursal = yield sucursal_1.Sucursal.findById(id);
+    const { numero } = req.params;
+    const sucursal = yield sucursal_1.Sucursal.findOne({ numero });
     if (sucursal) {
         res.json(sucursal);
     }
     else {
         res.status(404).json({
-            msg: `No existe sucursal`
+            msg: `No existe sucursal número ${numero}`
         });
     }
 });

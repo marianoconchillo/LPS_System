@@ -12,13 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPoliza = void 0;
 const poliza_1 = require("../models/dataBase/poliza");
 // @desc    Get Póliza
-// @route   GET /api/poliza/:id
+// @route   GET /api/polizas/:id
 // @access  Private
 const getPoliza = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const poliza = yield poliza_1.Poliza.findOne({ numeroPoliza: id })
         .populate("productor")
         .populate("cliente")
+        .populate("cobertura")
         .populate("vehiculoAsegurado");
     if (poliza) {
         res.json(poliza);

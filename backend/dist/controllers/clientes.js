@@ -12,17 +12,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCliente = void 0;
 const cliente_1 = require("../models/dataBase/cliente");
 // @desc    Get Cliente
-// @route   GET /api/clientes/:id
+// @route   GET /api/clientes/:dni
 // @access  Private
 const getCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const cliente = yield cliente_1.Cliente.findOne({ dni: id });
+    const { dni } = req.params;
+    const cliente = yield cliente_1.Cliente.findOne({ dni });
     if (cliente) {
         res.json(cliente);
     }
     else {
         res.status(404).json({
-            msg: `No existe usuario con dni ${id}`
+            msg: `No existe usuario con dni ${dni}`
         });
     }
 });

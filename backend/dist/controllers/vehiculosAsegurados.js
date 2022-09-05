@@ -9,22 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProductor = void 0;
-const productor_1 = require("../models/dataBase/productor");
-// @desc    Get Productor
-// @route   GET /api/productores/:numeroProductor
+exports.getVehiculoAsegurado = void 0;
+const vehiculoAsegurado_1 = require("../models/dataBase/vehiculoAsegurado");
+// @desc    Get Vehículo Asegurado
+// @route   GET /api/vehiculosAsegurados/:patente
 // @access  Private
-const getProductor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { numeroProductor } = req.params;
-    const productor = yield productor_1.Productor.findOne({ numeroProductor }).populate("sucursal");
-    if (productor) {
-        res.json(productor);
+const getVehiculoAsegurado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { patente } = req.params;
+    const vehiculoAsegurado = yield vehiculoAsegurado_1.VehiculoAsegurado.findOne({ patente })
+        .populate("tipoVehiculo");
+    if (vehiculoAsegurado) {
+        res.json(vehiculoAsegurado);
     }
     else {
         res.status(404).json({
-            msg: `No existe productor con número de productor ${numeroProductor}`
+            msg: `No existe vehículo asegurado con patente ${patente}`
         });
     }
 });
-exports.getProductor = getProductor;
-//# sourceMappingURL=productores.js.map
+exports.getVehiculoAsegurado = getVehiculoAsegurado;
+//# sourceMappingURL=vehiculosAsegurados.js.map

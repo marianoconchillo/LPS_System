@@ -9,22 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProductor = void 0;
-const productor_1 = require("../models/dataBase/productor");
-// @desc    Get Productor
-// @route   GET /api/productores/:numeroProductor
+exports.getTipoVehiculo = void 0;
+const tipoVehiculo_1 = require("../models/dataBase/tipoVehiculo");
+// @desc    Get Tipo Vehiculo
+// @route   GET /api/tiposVehiculos/:marca/:modelo/:version/:anio
 // @access  Private
-const getProductor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { numeroProductor } = req.params;
-    const productor = yield productor_1.Productor.findOne({ numeroProductor }).populate("sucursal");
-    if (productor) {
-        res.json(productor);
+const getTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { marca, modelo, version, anio } = req.params;
+    const tipoVehiculo = yield tipoVehiculo_1.TipoVehiculo.findOne({ marca, modelo, version, año: anio });
+    if (tipoVehiculo) {
+        res.json(tipoVehiculo);
     }
     else {
         res.status(404).json({
-            msg: `No existe productor con número de productor ${numeroProductor}`
+            msg: `No existe vehículo ${marca}, ${modelo}, ${anio}, ${version}`
         });
     }
+    console.log(marca, modelo, version, anio);
 });
-exports.getProductor = getProductor;
-//# sourceMappingURL=productores.js.map
+exports.getTipoVehiculo = getTipoVehiculo;
+//# sourceMappingURL=tiposVehiculos.js.map
