@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPoliza = void 0;
+exports.deletePoliza = exports.putPoliza = exports.postPoliza = exports.getPoliza = void 0;
 const poliza_1 = require("../models/dataBase/poliza");
 // @desc    Get Póliza
 // @route   GET /api/polizas/:numeroPoliza
@@ -25,10 +25,28 @@ const getPoliza = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json(poliza);
     }
     else {
-        res.status(404).json({
+        res.status(400).json({
             msg: `No existe póliza número ${numeroPoliza}`
         });
     }
 });
 exports.getPoliza = getPoliza;
+// @desc    Post Póliza
+// @route   POST /api/polizas
+// @access  Private
+const postPoliza = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.postPoliza = postPoliza;
+// @desc    Put Póliza
+// @route   GET /api/polizas/:numeroPoliza
+// @access  Private
+const putPoliza = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.putPoliza = putPoliza;
+// @desc    Delete Póliza
+// @route   GET /api/polizas/:numeroPoliza
+// @access  Private
+const deletePoliza = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.deletePoliza = deletePoliza;
 //# sourceMappingURL=polizas.js.map

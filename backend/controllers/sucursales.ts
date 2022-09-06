@@ -13,9 +13,27 @@ export const getSucursal = async (req: Request, res: Response) => {
     if (sucursal) {
         res.json(sucursal);
     } else {
-        res.status(404).json({
+        res.status(400).json({
             msg: `No existe sucursal número ${numero}`
         });
     }
 
+}
+
+// @desc    Post Sucursal
+// @route   POST /api/sucursales
+// @access  Private
+export const postSucursal = async (req: Request, res: Response) => {
+}
+
+// @desc    Put Sucursal
+// @route   PUT /api/sucursales/:numero
+// @access  Private
+export const putSucursal = async (req: Request, res: Response) => {
+}
+
+// @desc    Delete Sucursal
+// @route   DELETE /api/sucursales/:numero
+// @access  Private
+export const deleteSucursal = async (req: Request, res: Response) => {
 }

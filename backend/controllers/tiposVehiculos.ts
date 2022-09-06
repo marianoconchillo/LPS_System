@@ -13,10 +13,27 @@ export const getTipoVehiculo = async (req: Request, res: Response) => {
     if (tipoVehiculo) {
         res.json(tipoVehiculo);
     } else {
-        res.status(404).json({
+        res.status(400).json({
             msg: `No existe vehículo ${marca}, ${modelo}, ${anio}, ${version}`
         });
     }
+}
 
-    console.log(marca, modelo, version, anio);
+// @desc    POST Tipo Vehiculo
+// @route   POST /api/tiposVehiculos
+// @access  Private
+export const postTipoVehiculo = async (req: Request, res: Response) => {
+}
+
+// @desc    Put Tipo Vehiculo
+// @route   PUT /api/tiposVehiculos/:marca/:modelo/:version/:anio
+// @access  Private
+export const putTipoVehiculo = async (req: Request, res: Response) => {
+}
+
+// @desc    Delete Tipo Vehiculo
+// @route   DELETE /api/tiposVehiculos/:marca/:modelo/:version/:anio
+// @access  Private
+export const deleteTipoVehiculo = async (req: Request, res: Response) => {
+
 }

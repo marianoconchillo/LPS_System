@@ -15,9 +15,27 @@ export const getCobertura = async (req: Request, res: Response) => {
     if (cobertura) {
         res.json(cobertura);
     } else {
-        res.status(404).json({
+        res.status(400).json({
             msg: `No existe cobertura código ${codigoCobertura}`
         })
     }
 
+}
+
+// @desc    Post Cobertura
+// @route   POST /api/coberturas
+// @access  Private
+export const postCobertura = async (req: Request, res: Response) => {
+}
+
+// @desc    Put Cobertura
+// @route   PUT /api/coberturas/:codigoCobertura
+// @access  Private
+export const putCobertura = async (req: Request, res: Response) => {
+}
+
+// @desc    Delete Cobertura
+// @route   DELETE /api/coberturas/:codigoCobertura
+// @access  Private
+export const deleteCobertura = async (req: Request, res: Response) => {
 }

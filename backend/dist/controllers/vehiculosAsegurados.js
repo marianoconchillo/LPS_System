@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getVehiculoAsegurado = void 0;
+exports.deleteVehiculoAsegurado = exports.putVehiculoAsegurado = exports.postVehiculoAsegurado = exports.getVehiculoAsegurado = void 0;
 const vehiculoAsegurado_1 = require("../models/dataBase/vehiculoAsegurado");
 // @desc    Get Vehículo Asegurado
 // @route   GET /api/vehiculosAsegurados/:patente
@@ -22,10 +22,28 @@ const getVehiculoAsegurado = (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.json(vehiculoAsegurado);
     }
     else {
-        res.status(404).json({
+        res.status(400).json({
             msg: `No existe vehículo asegurado con patente ${patente}`
         });
     }
 });
 exports.getVehiculoAsegurado = getVehiculoAsegurado;
+// @desc    Post Vehículo Asegurado
+// @route   POST /api/vehiculosAsegurados
+// @access  Private
+const postVehiculoAsegurado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.postVehiculoAsegurado = postVehiculoAsegurado;
+// @desc    Put Vehículo Asegurado
+// @route   PUT /api/vehiculosAsegurados/:patente
+// @access  Private
+const putVehiculoAsegurado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.putVehiculoAsegurado = putVehiculoAsegurado;
+// @desc    Delete Vehículo Asegurado
+// @route   DELETE /api/vehiculosAsegurados/:patente
+// @access  Private
+const deleteVehiculoAsegurado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.deleteVehiculoAsegurado = deleteVehiculoAsegurado;
 //# sourceMappingURL=vehiculosAsegurados.js.map

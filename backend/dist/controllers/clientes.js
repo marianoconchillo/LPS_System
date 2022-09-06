@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCliente = void 0;
+exports.deleteCliente = exports.putCliente = exports.postCliente = exports.getCliente = void 0;
 const cliente_1 = require("../models/dataBase/cliente");
 // @desc    Get Cliente
 // @route   GET /api/clientes/:dni
@@ -21,10 +21,80 @@ const getCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.json(cliente);
     }
     else {
-        res.status(404).json({
+        res.status(400).json({
             msg: `No existe usuario con dni ${dni}`
         });
     }
 });
 exports.getCliente = getCliente;
+// @desc    Post Cliente
+// @route   POST /api/clientes
+// @access  Private
+const postCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { body } = req;
+    try {
+        const cliente = new cliente_1.Cliente(body);
+        yield cliente.save();
+        res.json(cliente);
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: `Error intentando crear Cliente`
+        });
+    }
+});
+exports.postCliente = postCliente;
+// @desc    Put Cliente
+// @route   PUT /api/clientes/:dni
+// @access  Private
+const putCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { dni } = req.params;
+    const { body } = req;
+    try {
+        const cliente = yield cliente_1.Cliente.findOne({ dni });
+        if (!cliente) {
+            res.status(400).json({
+                msg: `No existe usuario con dni ${dni}`
+            });
+        }
+        else {
+            yield cliente.updateOne(body);
+            res.json({
+                msg: `Cliente actualizado con éxtio`
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: `Error actualizar crear Cliente`
+        });
+    }
+});
+exports.putCliente = putCliente;
+// @desc    Delete Cliente
+// @route   DELETE /api/clientes/:id
+// @access  Private
+const deleteCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { dni } = req.params;
+    try {
+        const cliente = yield cliente_1.Cliente.findOne({ dni });
+        if (!cliente) {
+            res.status(400).json({
+                msg: `No existe usuario con dni ${dni}`
+            });
+        }
+        else {
+            yield cliente.deleteOne({ dni });
+            res.json({
+                msg: `Cliente eliminado con éxtio`
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: `Error intentando eliminar Cliente`
+        });
+    }
+});
+exports.deleteCliente = deleteCliente;
 //# sourceMappingURL=clientes.js.map

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTipoVehiculo = void 0;
+exports.deleteTipoVehiculo = exports.putTipoVehiculo = exports.postTipoVehiculo = exports.getTipoVehiculo = void 0;
 const tipoVehiculo_1 = require("../models/dataBase/tipoVehiculo");
 // @desc    Get Tipo Vehiculo
 // @route   GET /api/tiposVehiculos/:marca/:modelo/:version/:anio
@@ -21,11 +21,28 @@ const getTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 0, function
         res.json(tipoVehiculo);
     }
     else {
-        res.status(404).json({
+        res.status(400).json({
             msg: `No existe vehículo ${marca}, ${modelo}, ${anio}, ${version}`
         });
     }
-    console.log(marca, modelo, version, anio);
 });
 exports.getTipoVehiculo = getTipoVehiculo;
+// @desc    POST Tipo Vehiculo
+// @route   POST /api/tiposVehiculos
+// @access  Private
+const postTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.postTipoVehiculo = postTipoVehiculo;
+// @desc    Put Tipo Vehiculo
+// @route   PUT /api/tiposVehiculos/:marca/:modelo/:version/:anio
+// @access  Private
+const putTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.putTipoVehiculo = putTipoVehiculo;
+// @desc    Delete Tipo Vehiculo
+// @route   DELETE /api/tiposVehiculos/:marca/:modelo/:version/:anio
+// @access  Private
+const deleteTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.deleteTipoVehiculo = deleteTipoVehiculo;
 //# sourceMappingURL=tiposVehiculos.js.map

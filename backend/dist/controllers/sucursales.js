@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSucursal = void 0;
+exports.deleteSucursal = exports.putSucursal = exports.postSucursal = exports.getSucursal = void 0;
 const sucursal_1 = require("../models/dataBase/sucursal");
 // @desc    Get Sucursal
 // @route   GET /api/sucursales/:numero
@@ -21,10 +21,28 @@ const getSucursal = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.json(sucursal);
     }
     else {
-        res.status(404).json({
+        res.status(400).json({
             msg: `No existe sucursal número ${numero}`
         });
     }
 });
 exports.getSucursal = getSucursal;
+// @desc    Post Sucursal
+// @route   POST /api/sucursales
+// @access  Private
+const postSucursal = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.postSucursal = postSucursal;
+// @desc    Put Sucursal
+// @route   PUT /api/sucursales/:numero
+// @access  Private
+const putSucursal = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.putSucursal = putSucursal;
+// @desc    Delete Sucursal
+// @route   DELETE /api/sucursales/:numero
+// @access  Private
+const deleteSucursal = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.deleteSucursal = deleteSucursal;
 //# sourceMappingURL=sucursales.js.map

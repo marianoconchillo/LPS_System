@@ -14,9 +14,27 @@ export const getProductor = async (req: Request, res: Response) => {
     if (productor) {
         res.json(productor);
     } else {
-        res.status(404).json({
+        res.status(400).json({
             msg: `No existe productor con número de productor ${numeroProductor}`
         })
     }
 
+}
+
+// @desc    Post Productor
+// @route   GET /api/productores
+// @access  Private
+export const postProductor = async (req: Request, res: Response) => {
+}
+
+// @desc    Put Productor
+// @route   PUT /api/productores/:numeroProductor
+// @access  Private
+export const putProductor = async (req: Request, res: Response) => {
+}
+
+// @desc    Delete Productor
+// @route   DELETE /api/productores/:numeroProductor
+// @access  Private
+export const deleteProductor = async (req: Request, res: Response) => {
 }
