@@ -31,18 +31,70 @@ exports.getSucursal = getSucursal;
 // @route   POST /api/sucursales
 // @access  Private
 const postSucursal = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { body } = req;
+    try {
+        const sucursal = new sucursal_1.Sucursal(body);
+        yield sucursal.save();
+        res.json(sucursal);
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: `Error intentando crear Sucursal`
+        });
+    }
 });
 exports.postSucursal = postSucursal;
 // @desc    Put Sucursal
 // @route   PUT /api/sucursales/:numero
 // @access  Private
 const putSucursal = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { numero } = req.params;
+    const { body } = req;
+    try {
+        const sucursal = yield sucursal_1.Sucursal.findOne({ numero });
+        if (!sucursal) {
+            res.status(400).json({
+                msg: `No existe Sucursal con número ${sucursal}`
+            });
+        }
+        else {
+            yield sucursal.updateOne(body);
+            res.json({
+                msg: `Sucursal actualizada correctamente`
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: `Error intentando actualizar Sucursal`
+        });
+    }
 });
 exports.putSucursal = putSucursal;
 // @desc    Delete Sucursal
 // @route   DELETE /api/sucursales/:numero
 // @access  Private
 const deleteSucursal = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { numero } = req.params;
+    try {
+        const sucursal = yield sucursal_1.Sucursal.findOne({ numero });
+        if (!sucursal) {
+            res.status(400).json({
+                msg: `No existe Sucursal con número ${sucursal}`
+            });
+        }
+        else {
+            yield sucursal.deleteOne({ numero });
+            res.json({
+                msg: `Sucursal eliminada correctamente`
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: `Error intentando actualizar Sucursal`
+        });
+    }
 });
 exports.deleteSucursal = deleteSucursal;
 //# sourceMappingURL=sucursales.js.map

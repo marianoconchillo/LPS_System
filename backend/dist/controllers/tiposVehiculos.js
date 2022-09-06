@@ -31,18 +31,70 @@ exports.getTipoVehiculo = getTipoVehiculo;
 // @route   POST /api/tiposVehiculos
 // @access  Private
 const postTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { body } = req;
+    try {
+        const tipoVehiculo = new tipoVehiculo_1.TipoVehiculo(body);
+        yield tipoVehiculo.save();
+        res.json(tipoVehiculo);
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: `Error intentando crear TipoVehículo`
+        });
+    }
 });
 exports.postTipoVehiculo = postTipoVehiculo;
 // @desc    Put Tipo Vehiculo
 // @route   PUT /api/tiposVehiculos/:marca/:modelo/:version/:anio
 // @access  Private
 const putTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { marca, modelo, version, anio } = req.params;
+    const { body } = req;
+    try {
+        const tipoVehiculo = yield tipoVehiculo_1.TipoVehiculo.findOne({ marca, modelo, version, año: anio });
+        if (!tipoVehiculo) {
+            res.status(400).json({
+                msg: `No existe TipoVehículo con datos ${marca}, ${modelo}, ${version} y ${anio}`
+            });
+        }
+        else {
+            yield tipoVehiculo.updateOne(body);
+            res.json({
+                msg: `TipoVehículo actualizado con éxtio`
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: `Error al actualizar TipoVehículo`
+        });
+    }
 });
 exports.putTipoVehiculo = putTipoVehiculo;
 // @desc    Delete Tipo Vehiculo
 // @route   DELETE /api/tiposVehiculos/:marca/:modelo/:version/:anio
 // @access  Private
 const deleteTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { marca, modelo, version, anio } = req.params;
+    try {
+        const tipoVehiculo = yield tipoVehiculo_1.TipoVehiculo.findOne({ marca, modelo, version, año: anio });
+        if (!tipoVehiculo) {
+            res.status(400).json({
+                msg: `No existe TipoVehículo con datos ${marca}, ${modelo}, ${version} y ${anio}`
+            });
+        }
+        else {
+            yield tipoVehiculo.deleteOne({ marca, modelo, version, año: anio });
+            res.json({
+                msg: `TipoVehiculo eliminado con éxtio`
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: `Error intentando eliminar TipoVehiculo`
+        });
+    }
 });
 exports.deleteTipoVehiculo = deleteTipoVehiculo;
 //# sourceMappingURL=tiposVehiculos.js.map

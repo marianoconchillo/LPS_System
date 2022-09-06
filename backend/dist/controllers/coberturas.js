@@ -11,6 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCobertura = exports.putCobertura = exports.postCobertura = exports.getCobertura = void 0;
 const cobertura_1 = require("../models/dataBase/cobertura");
+const da_o_1 = require("../models/dataBase/da\u00F1o");
+const tipoVehiculo_1 = require("../models/dataBase/tipoVehiculo");
 // @desc    Get Cobertura
 // @route   GET /api/coberturas/:codigoCobertura
 // @access  Private
@@ -33,18 +35,103 @@ exports.getCobertura = getCobertura;
 // @route   POST /api/coberturas
 // @access  Private
 const postCobertura = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { body } = req;
+    const { vehiculos } = body;
+    const { daños } = body;
+    try {
+        if (vehiculos.length > 0 && daños.length > 0) {
+            const ids_vehiculos = [];
+            const ids_daños = [];
+            for (let i = 0; i < vehiculos.length; i++) {
+                let vehiculo = yield tipoVehiculo_1.TipoVehiculo.findOne(vehiculos[i]);
+                if (vehiculo) {
+                    ids_vehiculos.push(vehiculo._id);
+                }
+                else {
+                    res.status(500).json({
+                        msg: `TipoVehiculo no encontrado`
+                    });
+                }
+            }
+            for (let i = 0; i < daños.length; i++) {
+                let daño_encontrado = yield da_o_1.Daño.findOne(daños[i]);
+                if (daño_encontrado) {
+                    ids_daños.push(daño_encontrado._id);
+                }
+                else {
+                    res.status(500).json({
+                        msg: `Daño no encontrado`
+                    });
+                }
+            }
+            const cobertura = new cobertura_1.Cobertura({
+                codigoCobertura: body.codigoCobertura,
+                precio: body.precio,
+                vehiculos: ids_vehiculos,
+                daños: ids_daños
+            });
+            yield cobertura.save();
+            res.json(cobertura);
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: `Error intentando crear Cobertura`
+        });
+    }
 });
 exports.postCobertura = postCobertura;
 // @desc    Put Cobertura
 // @route   PUT /api/coberturas/:codigoCobertura
 // @access  Private
 const putCobertura = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { codigoCobertura } = req.params;
+    const { body } = req;
+    try {
+        const cobertura = yield cobertura_1.Cobertura.findOne({ codigoCobertura });
+        if (!cobertura) {
+            res.status(400).json({
+                msg: `No existe Cobertura con código ${codigoCobertura}`
+            });
+        }
+        else {
+            yield cobertura.updateOne(body);
+            res.json({
+                msg: `Cobertura actualizada con éxtio`
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: `Error al actualizar Cobertura`
+        });
+    }
 });
 exports.putCobertura = putCobertura;
 // @desc    Delete Cobertura
 // @route   DELETE /api/coberturas/:codigoCobertura
 // @access  Private
 const deleteCobertura = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { codigoCobertura } = req.params;
+    try {
+        const cobertura = yield cobertura_1.Cobertura.findOne({ codigoCobertura });
+        if (!cobertura) {
+            res.status(400).json({
+                msg: `No existe Cobertura con código ${codigoCobertura}`
+            });
+        }
+        else {
+            yield cobertura.deleteOne({ codigoCobertura });
+            res.json({
+                msg: `Cobertura eliminada con éxtio`
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: `Error intentando eliminar Cobertura`
+        });
+    }
 });
 exports.deleteCobertura = deleteCobertura;
 //# sourceMappingURL=coberturas.js.map

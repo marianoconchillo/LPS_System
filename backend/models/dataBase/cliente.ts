@@ -7,7 +7,7 @@ export interface ICliente extends Persona {
 }
 
 const clienteSchema = new Schema<ICliente>({
-    fechaNacimiento: { type: Date, required: true },
+    fechaNacimiento: { type: Date, required: true, enum: ["Casado", "Soltero"] },
     estadoCivil: { type: String, required: true },
     nombre: { type: String, required: true },
     apellido: { type: String, required: true },

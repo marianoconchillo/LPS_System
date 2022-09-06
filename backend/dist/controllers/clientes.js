@@ -22,7 +22,7 @@ const getCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
     else {
         res.status(400).json({
-            msg: `No existe usuario con dni ${dni}`
+            msg: `No existe Cliente con dni ${dni}`
         });
     }
 });
@@ -54,7 +54,7 @@ const putCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const cliente = yield cliente_1.Cliente.findOne({ dni });
         if (!cliente) {
             res.status(400).json({
-                msg: `No existe usuario con dni ${dni}`
+                msg: `No existe Cliente con dni ${dni}`
             });
         }
         else {
@@ -66,7 +66,7 @@ const putCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
     catch (error) {
         res.status(500).json({
-            msg: `Error actualizar crear Cliente`
+            msg: `Error al actualizar Cliente`
         });
     }
 });
@@ -80,7 +80,7 @@ const deleteCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         const cliente = yield cliente_1.Cliente.findOne({ dni });
         if (!cliente) {
             res.status(400).json({
-                msg: `No existe usuario con dni ${dni}`
+                msg: `No existe Cliente con dni ${dni}`
             });
         }
         else {

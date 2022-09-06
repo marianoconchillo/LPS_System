@@ -12,6 +12,7 @@ const coberturas_1 = __importDefault(require("../routes/coberturas"));
 const vehiculosAsegurados_1 = __importDefault(require("../routes/vehiculosAsegurados"));
 const sucursales_1 = __importDefault(require("../routes/sucursales"));
 const tiposVehiculos_1 = __importDefault(require("../routes/tiposVehiculos"));
+const da_o_1 = __importDefault(require("../routes/da\u00F1o"));
 class Server {
     constructor() {
         this.apiPaths = {
@@ -22,6 +23,7 @@ class Server {
             vehiculosAsegurados: "/api/vehiculosAsegurados",
             sucursales: "/api/sucursales",
             tiposVehiculos: "/api/tiposVehiculos",
+            daños: "/api/danios",
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || "5000";
@@ -36,6 +38,7 @@ class Server {
         this.app.use(this.apiPaths.vehiculosAsegurados, vehiculosAsegurados_1.default);
         this.app.use(this.apiPaths.sucursales, sucursales_1.default);
         this.app.use(this.apiPaths.tiposVehiculos, tiposVehiculos_1.default);
+        this.app.use(this.apiPaths.daños, da_o_1.default);
     }
     middlewares() {
         this.app.use((0, cors_1.default)());

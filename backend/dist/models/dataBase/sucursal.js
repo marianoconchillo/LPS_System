@@ -5,7 +5,7 @@ const mongoose_1 = require("mongoose");
 const sucursalSchema = new mongoose_1.Schema({
     numero: { type: Number, required: true, unique: true },
     direccion: { type: String, required: true },
-    localidad: { type: mongoose_1.Schema.Types.Mixed, required: true }
+    localidad: { type: { nombre: String, provincia: String, CP: String }, required: true }
 }, {
     collection: "sucursal"
 });

@@ -14,7 +14,7 @@ export const getCliente = async (req: Request, res: Response) => {
         res.json(cliente);
     } else {
         res.status(400).json({
-            msg: `No existe usuario con dni ${dni}`
+            msg: `No existe Cliente con dni ${dni}`
         })
     }
 }
@@ -55,7 +55,7 @@ export const putCliente = async (req: Request, res: Response) => {
 
         if (!cliente) {
             res.status(400).json({
-                msg: `No existe usuario con dni ${dni}`
+                msg: `No existe Cliente con dni ${dni}`
             })
         } else {
             await cliente.updateOne(body);
@@ -67,7 +67,7 @@ export const putCliente = async (req: Request, res: Response) => {
 
     } catch (error) {
         res.status(500).json({
-            msg: `Error actualizar crear Cliente`
+            msg: `Error al actualizar Cliente`
         });
     }
 
@@ -86,7 +86,7 @@ export const deleteCliente = async (req: Request, res: Response) => {
 
         if (!cliente) {
             res.status(400).json({
-                msg: `No existe usuario con dni ${dni}`
+                msg: `No existe Cliente con dni ${dni}`
             })
         } else {
             await cliente.deleteOne({ dni });

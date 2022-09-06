@@ -7,6 +7,7 @@ import coberturaRoutes from "../routes/coberturas";
 import vehiculoAseguradoRoutes from "../routes/vehiculosAsegurados";
 import sucursalRoutes from "../routes/sucursales";
 import tipoVehiculoRoutes from "../routes/tiposVehiculos";
+import dañoRoutes from "../routes/daño";
 
 class Server {
 
@@ -20,6 +21,7 @@ class Server {
         vehiculosAsegurados: "/api/vehiculosAsegurados",
         sucursales: "/api/sucursales",
         tiposVehiculos: "/api/tiposVehiculos",
+        daños: "/api/danios",
     }
 
     constructor() {
@@ -37,6 +39,7 @@ class Server {
         this.app.use(this.apiPaths.vehiculosAsegurados, vehiculoAseguradoRoutes);
         this.app.use(this.apiPaths.sucursales, sucursalRoutes);
         this.app.use(this.apiPaths.tiposVehiculos, tipoVehiculoRoutes);
+        this.app.use(this.apiPaths.daños, dañoRoutes);
     }
 
     middlewares() {

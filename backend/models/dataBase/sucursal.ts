@@ -13,7 +13,7 @@ export interface ISucursal {
 const sucursalSchema = new Schema<ISucursal>({
     numero: { type: Number, required: true, unique: true },
     direccion: { type: String, required: true },
-    localidad: { type: Schema.Types.Mixed, required: true }
+    localidad: { type: { nombre: String, provincia: String, CP: String }, required: true }
 },
     {
         collection: "sucursal"
