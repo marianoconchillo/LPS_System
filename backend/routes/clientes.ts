@@ -3,9 +3,11 @@ import { deleteCliente, getCliente, postCliente, putCliente } from "../controlle
 
 const router = Router();
 
-router.get("/:dni", getCliente);
-router.post("/", postCliente);
-router.put("/:dni", putCliente);
-router.delete("/:dni", deleteCliente);
+router.route("/").post(postCliente);
+
+router.route("/:dni")
+    .get(getCliente)
+    .put(putCliente)
+    .delete(deleteCliente);
 
 export default router;

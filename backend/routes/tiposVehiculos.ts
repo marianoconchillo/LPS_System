@@ -3,9 +3,11 @@ import { deleteTipoVehiculo, getTipoVehiculo, postTipoVehiculo, putTipoVehiculo 
 
 const router = Router();
 
-router.get("/:marca/:modelo/:version/:anio", getTipoVehiculo);
-router.post("/", postTipoVehiculo);
-router.put("/:marca/:modelo/:version/:anio", putTipoVehiculo);
-router.delete("/:marca/:modelo/:version/:anio", deleteTipoVehiculo);
+router.route("/").post(postTipoVehiculo);
+
+router.route("/:marca/:modelo/:version/:anio")
+    .get(getTipoVehiculo)
+    .put(putTipoVehiculo)
+    .delete(deleteTipoVehiculo);
 
 export default router;

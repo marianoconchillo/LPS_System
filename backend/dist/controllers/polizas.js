@@ -9,7 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePoliza = exports.putPoliza = exports.postPoliza = exports.getPoliza = void 0;
+exports.deletePoliza = exports.putPoliza = exports.postPoliza = exports.getCuotasVencidas = exports.getPolizaByDniPatente = exports.getPoliza = void 0;
+const cliente_1 = require("../models/dataBase/cliente");
+const cobertura_1 = require("../models/dataBase/cobertura");
 const poliza_1 = require("../models/dataBase/poliza");
 // @desc    Get Póliza
 // @route   GET /api/polizas/:numeroPoliza
@@ -31,10 +33,107 @@ const getPoliza = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getPoliza = getPoliza;
+// @desc    Get Póliza con DNI del Cliente y patente
+// @route   GET /api/polizas/:dni/:patente
+// @access  Private
+const getPolizaByDniPatente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { dni, patente } = req.params;
+    const poliza = yield poliza_1.Poliza.findOne()
+        .populate({
+        path: "vehiculoAsegurado",
+        match: { patente: { $eq: patente } }
+    })
+        .populate({
+        path: "cliente",
+        match: { dni: { $eq: dni } }
+    });
+    if (poliza && poliza.vehiculoAsegurado !== null && poliza.cliente !== null) {
+        res.json(poliza);
+    }
+    else {
+        res.json({});
+    }
+});
+exports.getPolizaByDniPatente = getPolizaByDniPatente;
+// @desc    Get Cuotas vencidas con DNI del Cliente
+// @route   GET /api/polizas/cuotas-vencidas/:dni
+// @access  Private
+const getCuotasVencidas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { dni } = req.params;
+    const cliente = yield cliente_1.Cliente.findOne({ dni });
+    if (cliente) {
+        const polizas = yield poliza_1.Poliza.find({ cliente: cliente._id });
+        let cuotasVencidas = [];
+        let i = 0;
+        while (i < polizas.length) {
+            const cuota1 = polizas[i].cuotas[i];
+            const cuota2 = polizas[i].cuotas[i + 1];
+            const cuota3 = polizas[i].cuotas[i + 2];
+            if (cuota1.estado === poliza_1.EstadoCuota.vencida) {
+                cuotasVencidas.push(cuota1);
+            }
+            if (cuota2.estado === poliza_1.EstadoCuota.vencida) {
+                cuotasVencidas.push(cuota1);
+            }
+            if (cuota3.estado === poliza_1.EstadoCuota.vencida) {
+                cuotasVencidas.push(cuota1);
+            }
+            i++;
+        }
+        res.json(cuotasVencidas);
+    }
+    else {
+        res.status(400).json({
+            msg: `No existe Cliente ${dni}`
+        });
+    }
+});
+exports.getCuotasVencidas = getCuotasVencidas;
 // @desc    Post Póliza
 // @route   POST /api/polizas
 // @access  Private
 const postPoliza = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { productor, cliente, cobertura, vehiculoAsegurado } = req.body;
+    const numeroPoliza = (yield poliza_1.Poliza.countDocuments()) + 1;
+    const fechaInicio = new Date();
+    const fechaFin = new Date(new Date().setMonth(fechaInicio.getMonth() + 3));
+    const precioCobertura = yield cobertura_1.Cobertura.findById(cobertura);
+    try {
+        if (precioCobertura) {
+            const cuotas = [];
+            for (let i = 0; i < 3; i++) {
+                const cuota = {
+                    numero: i + 1,
+                    estado: poliza_1.EstadoCuota.pagar,
+                    importe: precioCobertura.precio,
+                    fecha: new Date(new Date().setMonth(fechaInicio.getMonth() + i))
+                };
+                cuotas.push(cuota);
+            }
+            const poliza = new poliza_1.Poliza({
+                numeroPoliza,
+                fechaInicio,
+                fechaFin,
+                productor,
+                cliente,
+                cobertura,
+                vehiculoAsegurado,
+                cuotas
+            });
+            yield poliza.save();
+            res.json(poliza);
+        }
+        else {
+            res.status(400).json({
+                msg: `Error al buscar Cobertura`
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: `Error intentando crear Póliza`
+        });
+    }
 });
 exports.postPoliza = postPoliza;
 // @desc    Put Póliza

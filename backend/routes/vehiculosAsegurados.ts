@@ -3,9 +3,11 @@ import { deleteVehiculoAsegurado, getVehiculoAsegurado, postVehiculoAsegurado, p
 
 const router = Router();
 
-router.get("/:patente", getVehiculoAsegurado);
-router.post("/", postVehiculoAsegurado);
-router.put("/:patente", putVehiculoAsegurado);
-router.delete("/:patente", deleteVehiculoAsegurado);
+router.route("/").post(postVehiculoAsegurado)
+
+router.route("/:patente")
+    .get(getVehiculoAsegurado)
+    .put(putVehiculoAsegurado)
+    .delete(deleteVehiculoAsegurado);
 
 export default router;

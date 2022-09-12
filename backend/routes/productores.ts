@@ -3,9 +3,11 @@ import { deleteProductor, getProductor, postProductor, putProductor } from "../c
 
 const router = Router();
 
-router.get("/:numeroProductor", getProductor);
-router.post("/", postProductor);
-router.put("/:numeroProductor", putProductor);
-router.delete("/:numeroProductor", deleteProductor);
+router.route("/").post(postProductor);
+
+router.route("/:numeroProductor")
+    .get(getProductor)
+    .put(putProductor)
+    .delete(deleteProductor);
 
 export default router;

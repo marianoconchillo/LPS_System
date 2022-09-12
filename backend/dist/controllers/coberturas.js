@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCobertura = exports.putCobertura = exports.postCobertura = exports.getCobertura = void 0;
+exports.deleteCobertura = exports.putCobertura = exports.postCobertura = exports.getCoberturaByTipoVehiculo = exports.getCobertura = void 0;
 const cobertura_1 = require("../models/dataBase/cobertura");
 const da_o_1 = require("../models/dataBase/da\u00F1o");
 const tipoVehiculo_1 = require("../models/dataBase/tipoVehiculo");
@@ -31,13 +31,29 @@ const getCobertura = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.getCobertura = getCobertura;
+// @desc    Get Cobertura por TipoVehículo
+// @route   GET /api/coberturas/:marca/:modelo/:version/:anio
+// @access  Private
+const getCoberturaByTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { marca, modelo, version, anio } = req.params;
+    const tipoVehiculo = yield tipoVehiculo_1.TipoVehiculo.findOne({ marca, modelo, version, año: anio });
+    if (tipoVehiculo) {
+        const coberturas = yield cobertura_1.Cobertura.find({ vehiculos: tipoVehiculo }).populate("daños");
+        res.json(coberturas);
+    }
+    else {
+        res.status(400).json({
+            msg: `No existe cobertura para vehículo ${marca} ${modelo} ${version} ${anio}`
+        });
+    }
+});
+exports.getCoberturaByTipoVehiculo = getCoberturaByTipoVehiculo;
 // @desc    Post Cobertura
 // @route   POST /api/coberturas
 // @access  Private
 const postCobertura = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    const { vehiculos } = body;
-    const { daños } = body;
+    const { vehiculos, daños } = body;
     try {
         if (vehiculos.length > 0 && daños.length > 0) {
             const ids_vehiculos = [];

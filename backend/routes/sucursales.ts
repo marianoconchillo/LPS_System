@@ -3,9 +3,11 @@ import { deleteSucursal, getSucursal, postSucursal, putSucursal } from "../contr
 
 const router = Router();
 
-router.get("/:numero", getSucursal);
-router.post("/", postSucursal);
-router.put("/:numero", putSucursal);
-router.delete("/:numero", deleteSucursal);
+router.route("/").post(postSucursal);
+
+router.route("/:numero")
+    .get(getSucursal)
+    .put(putSucursal)
+    .delete(deleteSucursal);
 
 export default router;

@@ -3,9 +3,11 @@ import { deleteDaño, getDaño, postDaño, putDaño } from "../controllers/daño
 
 const router = Router();
 
-router.get("/:nombre", getDaño);
-router.post("/", postDaño);
-router.put("/:nombre", putDaño);
-router.delete("/:nombre", deleteDaño);
+router.route("/").post(postDaño);
+
+router.route("/:nombre")
+    .get(getDaño)
+    .put(putDaño)
+    .delete(deleteDaño);
 
 export default router;

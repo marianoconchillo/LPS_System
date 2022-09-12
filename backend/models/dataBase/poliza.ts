@@ -6,7 +6,7 @@ export enum EstadoCuota {
     pagada = "Pagada",
 }
 
-interface ICuota {
+export interface ICuota {
     numero: number;
     fecha: Date;
     importe: string;

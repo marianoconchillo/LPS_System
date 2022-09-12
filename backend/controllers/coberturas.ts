@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Cobertura } from "../models/dataBase/cobertura";
+import { Cobertura, ICobertura } from "../models/dataBase/cobertura";
 import { Daño } from "../models/dataBase/daño";
 import { TipoVehiculo } from "../models/dataBase/tipoVehiculo";
 
@@ -24,14 +24,38 @@ export const getCobertura = async (req: Request, res: Response) => {
 
 }
 
+// @desc    Get Cobertura por TipoVehículo
+// @route   GET /api/coberturas/:marca/:modelo/:version/:anio
+// @access  Private
+export const getCoberturaByTipoVehiculo = async (req: Request, res: Response) => {
+
+    const { marca, modelo, version, anio } = req.params;
+
+    const tipoVehiculo = await TipoVehiculo.findOne({ marca, modelo, version, año: anio });
+
+    if (tipoVehiculo) {
+
+        const coberturas = await Cobertura.find({ vehiculos: tipoVehiculo }).populate("daños");
+
+        res.json(coberturas);
+
+    } else {
+        res.status(400).json({
+            msg: `No existe cobertura para vehículo ${marca} ${modelo} ${version} ${anio}`
+        })
+    }
+
+
+}
+
 // @desc    Post Cobertura
 // @route   POST /api/coberturas
 // @access  Private
 export const postCobertura = async (req: Request, res: Response) => {
 
     const { body } = req;
-    const { vehiculos } = body;
-    const { daños } = body;
+
+    const { vehiculos, daños } = body;
 
     try {
         if (vehiculos.length > 0 && daños.length > 0) {

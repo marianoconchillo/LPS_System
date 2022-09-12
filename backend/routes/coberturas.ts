@@ -1,11 +1,16 @@
 import { Router } from "express";
-import { deleteCobertura, getCobertura, postCobertura, putCobertura } from "../controllers/coberturas";
+import { deleteCobertura, getCobertura, getCoberturaByTipoVehiculo, postCobertura, putCobertura } from "../controllers/coberturas";
 
 const router = Router();
 
-router.get("/:codigoCobertura", getCobertura);
-router.post("/", postCobertura);
-router.put("/:codigoCobertura", putCobertura);
-router.delete("/:codigoCobertura", deleteCobertura);
+router.route("/").post(postCobertura);
+
+router.route("/:codigoCobertura")
+    .get(getCobertura)
+    .put(putCobertura)
+    .delete(deleteCobertura);
+
+router.route("/:marca/:modelo/:version/:anio")
+    .get(getCoberturaByTipoVehiculo);
 
 export default router;

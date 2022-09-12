@@ -44,7 +44,7 @@ export const postProductor = async (req: Request, res: Response) => {
             await productor.save();
             res.json(productor);
         } else {
-            res.status(500).json({
+            res.status(400).json({
                 msg: `Sucursal número ${sucursal} no encontrada`
             })
         }

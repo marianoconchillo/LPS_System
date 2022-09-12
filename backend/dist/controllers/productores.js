@@ -48,7 +48,7 @@ const postProductor = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             res.json(productor);
         }
         else {
-            res.status(500).json({
+            res.status(400).json({
                 msg: `Sucursal número ${sucursal} no encontrada`
             });
         }
