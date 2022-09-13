@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePoliza = exports.putPoliza = exports.postPoliza = exports.getCuotasVencidas = exports.getPolizaByDniPatente = exports.getPoliza = void 0;
+exports.deletePoliza = exports.putPoliza = exports.postPoliza = exports.getPolizasByIdCliente = exports.getCuotasVencidas = exports.getPolizaByDniPatente = exports.getPoliza = void 0;
 const cliente_1 = require("../models/dataBase/cliente");
 const cobertura_1 = require("../models/dataBase/cobertura");
 const poliza_1 = require("../models/dataBase/poliza");
@@ -69,14 +69,14 @@ const getCuotasVencidas = (req, res) => __awaiter(void 0, void 0, void 0, functi
             const cuota1 = polizas[i].cuotas[i];
             const cuota2 = polizas[i].cuotas[i + 1];
             const cuota3 = polizas[i].cuotas[i + 2];
-            if (cuota1.estado === poliza_1.EstadoCuota.vencida) {
+            if (cuota1 && cuota1.estado === poliza_1.EstadoCuota.vencida) {
                 cuotasVencidas.push(cuota1);
             }
-            if (cuota2.estado === poliza_1.EstadoCuota.vencida) {
-                cuotasVencidas.push(cuota1);
+            if (cuota2 && cuota2.estado === poliza_1.EstadoCuota.vencida) {
+                cuotasVencidas.push(cuota2);
             }
-            if (cuota3.estado === poliza_1.EstadoCuota.vencida) {
-                cuotasVencidas.push(cuota1);
+            if (cuota3 && cuota3.estado === poliza_1.EstadoCuota.vencida) {
+                cuotasVencidas.push(cuota3);
             }
             i++;
         }
@@ -89,6 +89,34 @@ const getCuotasVencidas = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.getCuotasVencidas = getCuotasVencidas;
+// @desc    Get Pólizas con ID del Cliente
+// @route   GET /api/polizas/cliente/:id
+// @access  Private
+const getPolizasByIdCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const polizas = yield poliza_1.Poliza.find({ cliente: id })
+        .populate({
+        path: "productor",
+        populate: { path: "sucursal" }
+    })
+        .populate({
+        path: "cobertura",
+        populate: { path: "daños" }
+    })
+        .populate({
+        path: "vehiculoAsegurado",
+        populate: { path: "tipoVehiculo" }
+    });
+    if (polizas.length > 0) {
+        res.json(polizas);
+    }
+    else {
+        res.status(400).json({
+            msg: `Cliente no encontrado o sin Pólizas`
+        });
+    }
+});
+exports.getPolizasByIdCliente = getPolizasByIdCliente;
 // @desc    Post Póliza
 // @route   POST /api/polizas
 // @access  Private

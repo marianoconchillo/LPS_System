@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { deletePoliza, getCuotasVencidas, getPoliza, getPolizaByDniPatente, postPoliza, putPoliza } from "../controllers/polizas";
+import { deletePoliza, getCuotasVencidas, getPoliza, getPolizaByDniPatente, getPolizasByIdCliente, postPoliza, putPoliza } from "../controllers/polizas";
 
 const router = Router();
 
 router.route("/")
     .post(postPoliza);
+
 
 router.route("/:numeroPoliza")
     .get(getPoliza)
@@ -13,6 +14,9 @@ router.route("/:numeroPoliza")
 
 router.route("/cuotas-vencidas/:dni")
     .get(getCuotasVencidas);
+
+router.route("/cliente/:id")
+    .get(getPolizasByIdCliente);
 
 router.route("/:dni/:patente")
     .get(getPolizaByDniPatente);

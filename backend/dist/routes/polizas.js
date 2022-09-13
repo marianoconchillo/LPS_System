@@ -11,6 +11,8 @@ router.route("/:numeroPoliza")
     .delete(polizas_1.deletePoliza);
 router.route("/cuotas-vencidas/:dni")
     .get(polizas_1.getCuotasVencidas);
+router.route("/cliente/:id")
+    .get(polizas_1.getPolizasByIdCliente);
 router.route("/:dni/:patente")
     .get(polizas_1.getPolizaByDniPatente);
 exports.default = router;

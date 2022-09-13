@@ -69,20 +69,21 @@ export const getCuotasVencidas = async (req: Request, res: Response) => {
         let i = 0;
 
         while (i < polizas.length) {
+
             const cuota1: ICuota = polizas[i].cuotas[i];
             const cuota2: ICuota = polizas[i].cuotas[i + 1];
             const cuota3: ICuota = polizas[i].cuotas[i + 2];
 
-            if (cuota1.estado === EstadoCuota.vencida) {
+            if (cuota1 && cuota1.estado === EstadoCuota.vencida) {
                 cuotasVencidas.push(cuota1);
             }
 
-            if (cuota2.estado === EstadoCuota.vencida) {
-                cuotasVencidas.push(cuota1);
+            if (cuota2 && cuota2.estado === EstadoCuota.vencida) {
+                cuotasVencidas.push(cuota2);
             }
 
-            if (cuota3.estado === EstadoCuota.vencida) {
-                cuotasVencidas.push(cuota1);
+            if (cuota3 && cuota3.estado === EstadoCuota.vencida) {
+                cuotasVencidas.push(cuota3);
             }
 
             i++;
@@ -93,6 +94,39 @@ export const getCuotasVencidas = async (req: Request, res: Response) => {
     } else {
         res.status(400).json({
             msg: `No existe Cliente ${dni}`
+        });
+    }
+
+}
+
+// @desc    Get Pólizas con ID del Cliente
+// @route   GET /api/polizas/cliente/:id
+// @access  Private
+export const getPolizasByIdCliente = async (req: Request, res: Response) => {
+
+    const { id } = req.params;
+
+    const polizas = await Poliza.find({ cliente: id })
+        .populate({
+            path: "productor",
+            populate: { path: "sucursal" }
+        })
+        .populate({
+            path: "cobertura",
+            populate: { path: "daños" }
+        })
+        .populate({
+            path: "vehiculoAsegurado",
+            populate: { path: "tipoVehiculo" }
+        });
+
+    if (polizas.length > 0) {
+
+        res.json(polizas);
+
+    } else {
+        res.status(400).json({
+            msg: `Cliente no encontrado o sin Pólizas`
         });
     }
 
