@@ -39,7 +39,14 @@ const getCoberturaByTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 
     const tipoVehiculo = yield tipoVehiculo_1.TipoVehiculo.findOne({ marca, modelo, version, año: anio });
     if (tipoVehiculo) {
         const coberturas = yield cobertura_1.Cobertura.find({ vehiculos: tipoVehiculo }).populate("daños");
-        res.json(coberturas);
+        if (coberturas.length > 0) {
+            res.json(coberturas);
+        }
+        else {
+            res.status(400).json({
+                msg: `No existen coberturas para vehículo ${marca} ${modelo} ${version} ${anio}`
+            });
+        }
     }
     else {
         res.status(400).json({

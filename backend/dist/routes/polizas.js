@@ -6,14 +6,12 @@ const router = (0, express_1.Router)();
 router.route("/")
     .post(polizas_1.postPoliza);
 router.route("/:numeroPoliza")
-    .get(polizas_1.getPoliza)
-    .put(polizas_1.putPoliza)
-    .delete(polizas_1.deletePoliza);
+    .get(polizas_1.getPoliza);
 router.route("/cuotas-vencidas/:dni")
     .get(polizas_1.getCuotasVencidas);
 router.route("/cliente/:id")
     .get(polizas_1.getPolizasByIdCliente);
-router.route("/:dni/:patente")
-    .get(polizas_1.getPolizaByDniPatente);
+router.route("/vehiculoAsegurado/:patente")
+    .get(polizas_1.getPolizasVigentesByPatente);
 exports.default = router;
 //# sourceMappingURL=polizas.js.map

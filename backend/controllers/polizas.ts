@@ -1,8 +1,8 @@
 import { Request, Response } from "express"
 import { Cliente } from "../models/dataBase/cliente";
 import { Cobertura } from "../models/dataBase/cobertura";
-import { EstadoCuota, ICuota, Poliza } from "../models/dataBase/poliza";
-import { Productor } from "../models/dataBase/productor";
+import { EstadoCuota, ICuota, IPoliza, Poliza } from "../models/dataBase/poliza";
+import { VehiculoAsegurado } from "../models/dataBase/vehiculoAsegurado";
 
 // @desc    Get Póliza
 // @route   GET /api/polizas/:numeroPoliza
@@ -27,27 +27,41 @@ export const getPoliza = async (req: Request, res: Response) => {
 
 }
 
-// @desc    Get Póliza con DNI del Cliente y patente
-// @route   GET /api/polizas/:dni/:patente
+// @desc    Get Póliza con patente
+// @route   GET /api/polizas/vehiculoAsegurado/:patente
 // @access  Private
-export const getPolizaByDniPatente = async (req: Request, res: Response) => {
+export const getPolizasVigentesByPatente = async (req: Request, res: Response) => {
 
-    const { dni, patente } = req.params;
+    const { patente } = req.params;
 
-    const poliza = await Poliza.findOne()
-        .populate({
-            path: "vehiculoAsegurado",
-            match: { patente: { $eq: patente } }
-        })
-        .populate({
-            path: "cliente",
-            match: { dni: { $eq: dni } }
-        });
+    const vehiculoAsegurado = await VehiculoAsegurado.findOne({ patente });
 
-    if (poliza && poliza.vehiculoAsegurado !== null && poliza.cliente !== null) {
-        res.json(poliza);
+    if (vehiculoAsegurado) {
+
+        // Debería ser find y testear
+        const polizas = await Poliza.find({ vehiculoAsegurado: vehiculoAsegurado._id });
+
+        if (polizas.length > 0) {
+            const today = new Date();
+            let i: number = 0;
+            let vigente: boolean = false;
+
+            while (i < polizas.length && !vigente) {
+                if (polizas[i].fechaFin >= today) {
+                    vigente = true;
+                    res.json(polizas[i]);
+                }
+                i++;
+            }
+
+            res.json({ msg: `Vehículo ${patente} sin pólizas vigentes` });
+
+        } else {
+            res.json({ msg: `Vehículo ${patente} sin pólizas asociadas` });
+        }
+
     } else {
-        res.json({});
+        res.json({ msg: `No existe Vehículo Asegurado con patente ${patente}` });
     }
 
 }
@@ -66,30 +80,28 @@ export const getCuotasVencidas = async (req: Request, res: Response) => {
         const polizas = await Poliza.find({ cliente: cliente._id });
 
         let cuotasVencidas: ICuota[] = [];
-        let i = 0;
+        let i: number = 0;
+        let j: number = 0;
 
         while (i < polizas.length) {
 
-            const cuota1: ICuota = polizas[i].cuotas[i];
-            const cuota2: ICuota = polizas[i].cuotas[i + 1];
-            const cuota3: ICuota = polizas[i].cuotas[i + 2];
+            const { cuotas } = polizas[i];
 
-            if (cuota1 && cuota1.estado === EstadoCuota.vencida) {
-                cuotasVencidas.push(cuota1);
+            while (j < cuotas.length) {
+                const cuota: ICuota = cuotas[i];
+                if (cuota.estado === EstadoCuota.vencida) {
+                    cuotasVencidas.push(cuota);
+                }
+                j++;
             }
-
-            if (cuota2 && cuota2.estado === EstadoCuota.vencida) {
-                cuotasVencidas.push(cuota2);
-            }
-
-            if (cuota3 && cuota3.estado === EstadoCuota.vencida) {
-                cuotasVencidas.push(cuota3);
-            }
-
             i++;
         }
 
-        res.json(cuotasVencidas);
+        if (cuotasVencidas.length > 0) {
+            res.json(cuotasVencidas);
+        } else {
+            res.json({ msg: `Asegurado ${dni} no tiene cuotas vencidas` });
+        }
 
     } else {
         res.status(400).json({
@@ -185,16 +197,4 @@ export const postPoliza = async (req: Request, res: Response) => {
             msg: `Error intentando crear Póliza`
         });
     }
-}
-
-// @desc    Put Póliza
-// @route   GET /api/polizas/:numeroPoliza
-// @access  Private
-export const putPoliza = async (req: Request, res: Response) => {
-}
-
-// @desc    Delete Póliza
-// @route   GET /api/polizas/:numeroPoliza
-// @access  Private
-export const deletePoliza = async (req: Request, res: Response) => {
 }

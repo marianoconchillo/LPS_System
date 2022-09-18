@@ -37,7 +37,13 @@ export const getCoberturaByTipoVehiculo = async (req: Request, res: Response) =>
 
         const coberturas = await Cobertura.find({ vehiculos: tipoVehiculo }).populate("daños");
 
-        res.json(coberturas);
+        if (coberturas.length > 0) {
+            res.json(coberturas);
+        } else {
+            res.status(400).json({
+                msg: `No existen coberturas para vehículo ${marca} ${modelo} ${version} ${anio}`
+            })
+        }
 
     } else {
         res.status(400).json({

@@ -24,6 +24,10 @@ export interface IPoliza {
     cuotas: ICuota[];
 }
 
+const arrayLimit = (arrayCuotas: ICuota[]) => {
+    return arrayCuotas.length <= 12;
+}
+
 const polizaSchema = new Schema<IPoliza>({
     numeroPoliza: { type: Number, required: true, unique: true },
     fechaInicio: { type: Date, required: true },
@@ -32,7 +36,7 @@ const polizaSchema = new Schema<IPoliza>({
     cliente: { type: Schema.Types.ObjectId, required: true, ref: "Cliente" },
     cobertura: { type: Schema.Types.ObjectId, required: true, ref: "Cobertura" },
     vehiculoAsegurado: { type: Schema.Types.ObjectId, required: true, ref: "VehiculoAsegurado" },
-    cuotas: [{ type: { numero: Number, fecha: Date, importe: String, estado: String }}]
+    cuotas: [{ type: { numero: Number, fecha: Date, importe: String, estado: String }, validate: [arrayLimit, "No exceder límite de 12 cuotas"] }]
 },
     {
         collection: "poliza"
