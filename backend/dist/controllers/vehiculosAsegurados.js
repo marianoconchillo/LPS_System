@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteVehiculoAsegurado = exports.putVehiculoAsegurado = exports.postVehiculoAsegurado = exports.getVehiculoAsegurado = void 0;
+exports.deleteVehiculoAsegurado = exports.putVehiculoAsegurado = exports.postVehiculoAsegurado = exports.getIDTipoVehiculoByID = exports.getVehiculoAsegurado = void 0;
 const tipoVehiculo_1 = require("../models/dataBase/tipoVehiculo");
 const vehiculoAsegurado_1 = require("../models/dataBase/vehiculoAsegurado");
 // @desc    Get Vehículo Asegurado
@@ -29,6 +29,22 @@ const getVehiculoAsegurado = (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.getVehiculoAsegurado = getVehiculoAsegurado;
+// @desc    Get Tipo Vehículo por ID Vehículo Asegurado
+// @route   GET /api/vehiculosAsegurados/tipoVehiculo/:id
+// @access  Private
+const getIDTipoVehiculoByID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const tipoVehiculo = yield vehiculoAsegurado_1.VehiculoAsegurado.findById(id).populate("tipoVehiculo");
+    if (tipoVehiculo) {
+        res.json({ tipoVehiculo: tipoVehiculo.tipoVehiculo._id });
+    }
+    else {
+        res.status(400).json({
+            msg: `No se pudo encontrar Vehículo Asegurado`
+        });
+    }
+});
+exports.getIDTipoVehiculoByID = getIDTipoVehiculoByID;
 // @desc    Post Vehículo Asegurado
 // @route   POST /api/vehiculosAsegurados
 // @access  Private

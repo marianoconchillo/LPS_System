@@ -50,9 +50,37 @@ export const getCoberturaByTipoVehiculo = async (req: Request, res: Response) =>
             msg: `No existe cobertura para vehículo ${marca} ${modelo} ${version} ${anio}`
         })
     }
-
-
 }
+
+// @desc    Get Coberturas por ID TipoVehículo
+// @route   GET /api/coberturas/tipoVehiculo/:id
+// @access  Private
+export const getCoberturaByIDTipoVehiculo = async (req: Request, res: Response) => {
+
+    const { id } = req.params;
+
+    const tipoVehiculo = await TipoVehiculo.findById(id);
+
+    if (tipoVehiculo) {
+
+        const coberturas = await Cobertura.find({ vehiculos: tipoVehiculo });
+
+        if (coberturas.length > 0) {
+            res.json(coberturas);
+        } else {
+            res.status(400).json({
+                msg: `No existen coberturas para ese vehículo`
+            })
+        }
+
+    } else {
+        res.status(400).json({
+            msg: `No existen coberturas para ese vehículo`
+        })
+    }
+}
+
+
 
 // @desc    Post Cobertura
 // @route   POST /api/coberturas

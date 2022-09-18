@@ -8,5 +8,7 @@ router.route("/:patente")
     .get(vehiculosAsegurados_1.getVehiculoAsegurado)
     .put(vehiculosAsegurados_1.putVehiculoAsegurado)
     .delete(vehiculosAsegurados_1.deleteVehiculoAsegurado);
+router.route("/tipoVehiculo/:id")
+    .get(vehiculosAsegurados_1.getIDTipoVehiculoByID);
 exports.default = router;
 //# sourceMappingURL=vehiculosAsegurados.js.map

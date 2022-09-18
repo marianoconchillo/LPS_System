@@ -22,6 +22,27 @@ export const getVehiculoAsegurado = async (req: Request, res: Response) => {
 
 }
 
+// @desc    Get Tipo Vehículo por ID Vehículo Asegurado
+// @route   GET /api/vehiculosAsegurados/tipoVehiculo/:id
+// @access  Private
+export const getIDTipoVehiculoByID = async (req: Request, res: Response) => {
+
+    const { id } = req.params;
+
+    const tipoVehiculo = await VehiculoAsegurado.findById(id).populate("tipoVehiculo");
+
+    if (tipoVehiculo) {
+
+        res.json({ tipoVehiculo: tipoVehiculo.tipoVehiculo._id });
+
+    } else {
+        res.status(400).json({
+            msg: `No se pudo encontrar Vehículo Asegurado`
+        })
+    }
+
+}
+
 // @desc    Post Vehículo Asegurado
 // @route   POST /api/vehiculosAsegurados
 // @access  Private

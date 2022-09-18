@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCobertura = exports.putCobertura = exports.postCobertura = exports.getCoberturaByTipoVehiculo = exports.getCobertura = void 0;
+exports.deleteCobertura = exports.putCobertura = exports.postCobertura = exports.getCoberturaByIDTipoVehiculo = exports.getCoberturaByTipoVehiculo = exports.getCobertura = void 0;
 const cobertura_1 = require("../models/dataBase/cobertura");
 const da_o_1 = require("../models/dataBase/da\u00F1o");
 const tipoVehiculo_1 = require("../models/dataBase/tipoVehiculo");
@@ -55,6 +55,30 @@ const getCoberturaByTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 
     }
 });
 exports.getCoberturaByTipoVehiculo = getCoberturaByTipoVehiculo;
+// @desc    Get Coberturas por ID TipoVehículo
+// @route   GET /api/coberturas/tipoVehiculo/:id
+// @access  Private
+const getCoberturaByIDTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const tipoVehiculo = yield tipoVehiculo_1.TipoVehiculo.findById(id);
+    if (tipoVehiculo) {
+        const coberturas = yield cobertura_1.Cobertura.find({ vehiculos: tipoVehiculo });
+        if (coberturas.length > 0) {
+            res.json(coberturas);
+        }
+        else {
+            res.status(400).json({
+                msg: `No existen coberturas para ese vehículo`
+            });
+        }
+    }
+    else {
+        res.status(400).json({
+            msg: `No existen coberturas para ese vehículo`
+        });
+    }
+});
+exports.getCoberturaByIDTipoVehiculo = getCoberturaByIDTipoVehiculo;
 // @desc    Post Cobertura
 // @route   POST /api/coberturas
 // @access  Private

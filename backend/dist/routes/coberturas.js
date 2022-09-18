@@ -8,6 +8,8 @@ router.route("/:codigoCobertura")
     .get(coberturas_1.getCobertura)
     .put(coberturas_1.putCobertura)
     .delete(coberturas_1.deleteCobertura);
+router.route("/tipoVehiculo/:id")
+    .get(coberturas_1.getCoberturaByIDTipoVehiculo);
 router.route("/:marca/:modelo/:version/:anio")
     .get(coberturas_1.getCoberturaByTipoVehiculo);
 exports.default = router;
