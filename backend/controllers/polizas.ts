@@ -3,6 +3,7 @@ import { Cliente } from "../models/dataBase/cliente";
 import { Cobertura } from "../models/dataBase/cobertura";
 import { EstadoCuota, ICuota, IPoliza, Poliza } from "../models/dataBase/poliza";
 import { VehiculoAsegurado } from "../models/dataBase/vehiculoAsegurado";
+import { patenteValida } from "../utils/verifications";
 
 // @desc    Get Póliza
 // @route   GET /api/polizas/:numeroPoliza
@@ -34,35 +35,42 @@ export const getPolizasVigentesByPatente = async (req: Request, res: Response) =
 
     const { patente } = req.params;
 
-    const vehiculoAsegurado = await VehiculoAsegurado.findOne({ patente });
+    if (patenteValida(patente)) {
 
-    if (vehiculoAsegurado) {
+        const vehiculoAsegurado = await VehiculoAsegurado.findOne({ patente });
 
-        // Debería ser find y testear
-        const polizas = await Poliza.find({ vehiculoAsegurado: vehiculoAsegurado._id });
+        if (vehiculoAsegurado) {
 
-        if (polizas.length > 0) {
-            const today = new Date();
-            let i: number = 0;
-            let vigente: boolean = false;
+            const polizas = await Poliza.find({ vehiculoAsegurado: vehiculoAsegurado._id });
 
-            while (i < polizas.length && !vigente) {
-                if (polizas[i].fechaFin >= today) {
-                    vigente = true;
-                    res.json(polizas[i]);
+            if (polizas.length > 0) {
+                const today = new Date();
+                let i: number = 0;
+                let vigente: boolean = false;
+
+                while (i < polizas.length && !vigente) {
+                    if (polizas[i].fechaFin >= today) {
+                        vigente = true;
+                        res.json(polizas[i]);
+                    }
+                    i++;
                 }
-                i++;
+
+                res.json({ msg: `Vehículo ${patente} sin pólizas vigentes` });
+
+            } else {
+                res.json({ msg: `Vehículo ${patente} sin pólizas asociadas` });
             }
 
-            res.json({ msg: `Vehículo ${patente} sin pólizas vigentes` });
-
         } else {
-            res.json({ msg: `Vehículo ${patente} sin pólizas asociadas` });
+            res.json({ msg: `No existe Vehículo Asegurado con patente ${patente}` });
         }
-
     } else {
-        res.json({ msg: `No existe Vehículo Asegurado con patente ${patente}` });
+        res.status(400).json({
+            msg: `Patente inválida`
+        });
     }
+
 
 }
 

@@ -47,7 +47,7 @@ export const getCoberturaByTipoVehiculo = async (req: Request, res: Response) =>
 
     } else {
         res.status(400).json({
-            msg: `No existe cobertura para vehículo ${marca} ${modelo} ${version} ${anio}`
+            msg: `No existe Vehículo ${marca} ${modelo} ${version} ${anio}`
         })
     }
 }

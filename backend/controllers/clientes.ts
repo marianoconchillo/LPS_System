@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Cliente } from "../models/dataBase/cliente";
+import { dniValido } from "../utils/verifications";
 
 // @desc    Get Cliente
 // @route   GET /api/clientes/:dni
@@ -8,15 +9,22 @@ export const getCliente = async (req: Request, res: Response) => {
 
     const { dni } = req.params;
 
-    const cliente = await Cliente.findOne({ dni });
+    if (dniValido(dni)) {
+        const cliente = await Cliente.findOne({ dni });
 
-    if (cliente) {
-        res.json(cliente);
+        if (cliente) {
+            res.json(cliente);
+        } else {
+            res.status(400).json({
+                msg: `No existe Cliente con dni ${dni}`
+            });
+        }
     } else {
         res.status(400).json({
-            msg: `No existe Cliente con dni ${dni}`
-        })
+            msg: `Número de DNI inválido`
+        });
     }
+
 }
 
 // @desc    Post Cliente

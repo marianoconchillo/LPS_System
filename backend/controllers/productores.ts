@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Productor } from "../models/dataBase/productor";
 import { Sucursal } from "../models/dataBase/sucursal";
+import { numeroProductorValido } from "../utils/verifications";
 
 // @desc    Get Productor
 // @route   GET /api/productores/:numeroProductor
@@ -9,15 +10,22 @@ export const getProductor = async (req: Request, res: Response) => {
 
     const { numeroProductor } = req.params;
 
-    const productor = await Productor.findOne({ numeroProductor }).populate("sucursal");
+    if (numeroProductorValido(numeroProductor)) {
+        const productor = await Productor.findOne({ numeroProductor }).populate("sucursal");
 
-    if (productor) {
-        res.json(productor);
+        if (productor) {
+            res.json(productor);
+        } else {
+            res.status(400).json({
+                msg: `No existe productor con número de productor ${numeroProductor}`
+            })
+        }
     } else {
         res.status(400).json({
-            msg: `No existe productor con número de productor ${numeroProductor}`
+            msg: `Número de productor inválido`
         })
     }
+
 
 }
 

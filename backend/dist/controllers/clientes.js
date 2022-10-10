@@ -11,18 +11,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCliente = exports.putCliente = exports.postCliente = exports.getCliente = void 0;
 const cliente_1 = require("../models/dataBase/cliente");
+const verifications_1 = require("../utils/verifications");
 // @desc    Get Cliente
 // @route   GET /api/clientes/:dni
 // @access  Private
 const getCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { dni } = req.params;
-    const cliente = yield cliente_1.Cliente.findOne({ dni });
-    if (cliente) {
-        res.json(cliente);
+    if ((0, verifications_1.dniValido)(dni)) {
+        const cliente = yield cliente_1.Cliente.findOne({ dni });
+        if (cliente) {
+            res.json(cliente);
+        }
+        else {
+            res.status(400).json({
+                msg: `No existe Cliente con dni ${dni}`
+            });
+        }
     }
     else {
         res.status(400).json({
-            msg: `No existe Cliente con dni ${dni}`
+            msg: `Número de DNI inválido`
         });
     }
 });

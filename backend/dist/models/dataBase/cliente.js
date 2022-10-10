@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cliente = void 0;
 const mongoose_1 = require("mongoose");
 const clienteSchema = new mongoose_1.Schema({
-    fechaNacimiento: { type: Date, required: true, enum: ["Casado", "Soltero"] },
-    estadoCivil: { type: String, required: true },
+    fechaNacimiento: { type: Date, required: true },
+    estadoCivil: { type: String, required: true, enum: ["Casado", "Soltero"] },
     nombre: { type: String, required: true },
     apellido: { type: String, required: true },
     dni: { type: String, required: true, unique: true },

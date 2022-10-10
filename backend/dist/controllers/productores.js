@@ -12,18 +12,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProductor = exports.putProductor = exports.postProductor = exports.getProductor = void 0;
 const productor_1 = require("../models/dataBase/productor");
 const sucursal_1 = require("../models/dataBase/sucursal");
+const verifications_1 = require("../utils/verifications");
 // @desc    Get Productor
 // @route   GET /api/productores/:numeroProductor
 // @access  Private
 const getProductor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { numeroProductor } = req.params;
-    const productor = yield productor_1.Productor.findOne({ numeroProductor }).populate("sucursal");
-    if (productor) {
-        res.json(productor);
+    if ((0, verifications_1.numeroProductorValido)(numeroProductor)) {
+        const productor = yield productor_1.Productor.findOne({ numeroProductor }).populate("sucursal");
+        if (productor) {
+            res.json(productor);
+        }
+        else {
+            res.status(400).json({
+                msg: `No existe productor con número de productor ${numeroProductor}`
+            });
+        }
     }
     else {
         res.status(400).json({
-            msg: `No existe productor con número de productor ${numeroProductor}`
+            msg: `Número de productor inválido`
         });
     }
 });

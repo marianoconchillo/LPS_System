@@ -50,7 +50,7 @@ const getCoberturaByTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 
     }
     else {
         res.status(400).json({
-            msg: `No existe cobertura para vehículo ${marca} ${modelo} ${version} ${anio}`
+            msg: `No existe Vehículo ${marca} ${modelo} ${version} ${anio}`
         });
     }
 });
