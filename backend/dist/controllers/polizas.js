@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postPoliza = exports.getPolizasByIdCliente = exports.getCuotasVencidas = exports.getPolizasVigentesByPatente = exports.getPoliza = void 0;
+exports.postPoliza = exports.getPolizasByIdCliente = exports.verificarCuotasVencidas = exports.verificarPolizasVigentesByPatente = exports.getPoliza = void 0;
 const cliente_1 = require("../models/dataBase/cliente");
 const cobertura_1 = require("../models/dataBase/cobertura");
 const poliza_1 = require("../models/dataBase/poliza");
@@ -38,7 +38,7 @@ exports.getPoliza = getPoliza;
 // @desc    Get Póliza con patente
 // @route   GET /api/polizas/vehiculoAsegurado/:patente
 // @access  Private
-const getPolizasVigentesByPatente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const verificarPolizasVigentesByPatente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { patente } = req.params;
     if ((0, verifications_1.patenteValida)(patente)) {
         const vehiculoAsegurado = yield vehiculoAsegurado_1.VehiculoAsegurado.findOne({ patente });
@@ -51,18 +51,20 @@ const getPolizasVigentesByPatente = (req, res) => __awaiter(void 0, void 0, void
                 while (i < polizas.length && !vigente) {
                     if (polizas[i].fechaFin >= today) {
                         vigente = true;
-                        res.json(polizas[i]);
+                        res.status(400).json({
+                            msg: "Ya existe póliza vigente para ese vehículo",
+                            polizaVigente: polizas[i]
+                        });
                     }
                     i++;
                 }
-                res.json({ msg: `Vehículo ${patente} sin pólizas vigentes` });
             }
             else {
                 res.json({ msg: `Vehículo ${patente} sin pólizas asociadas` });
             }
         }
         else {
-            res.json({ msg: `No existe Vehículo Asegurado con patente ${patente}` });
+            res.json({ msg: `Vehículo ${patente} sin pólizas asociadas` });
         }
     }
     else {
@@ -71,43 +73,53 @@ const getPolizasVigentesByPatente = (req, res) => __awaiter(void 0, void 0, void
         });
     }
 });
-exports.getPolizasVigentesByPatente = getPolizasVigentesByPatente;
+exports.verificarPolizasVigentesByPatente = verificarPolizasVigentesByPatente;
 // @desc    Get Cuotas vencidas con DNI del Cliente
 // @route   GET /api/polizas/cuotas-vencidas/:dni
 // @access  Private
-const getCuotasVencidas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const verificarCuotasVencidas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { dni } = req.params;
-    const cliente = yield cliente_1.Cliente.findOne({ dni });
-    if (cliente) {
-        const polizas = yield poliza_1.Poliza.find({ cliente: cliente._id });
-        let cuotasVencidas = [];
-        let i = 0;
-        let j = 0;
-        while (i < polizas.length) {
-            const { cuotas } = polizas[i];
-            while (j < cuotas.length) {
-                const cuota = cuotas[i];
-                if (cuota.estado === poliza_1.EstadoCuota.vencida) {
-                    cuotasVencidas.push(cuota);
+    if ((0, verifications_1.dniValido)(dni)) {
+        const cliente = yield cliente_1.Cliente.findOne({ dni });
+        if (cliente) {
+            const polizas = yield poliza_1.Poliza.find({ cliente: cliente._id });
+            let cuotasVencidas = [];
+            let i = 0;
+            let j = 0;
+            while (i < polizas.length) {
+                const { cuotas } = polizas[i];
+                while (j < cuotas.length) {
+                    const cuota = cuotas[i];
+                    if (cuota.estado === poliza_1.EstadoCuota.vencida) {
+                        cuotasVencidas.push(cuota);
+                    }
+                    j++;
                 }
-                j++;
+                i++;
             }
-            i++;
-        }
-        if (cuotasVencidas.length > 0) {
-            res.json(cuotasVencidas);
+            if (cuotasVencidas.length > 0) {
+                res.status(400).json({
+                    msg: `El cliente ${dni} posee cuotas vencidas`,
+                    cuotasVencidas
+                });
+            }
+            else {
+                res.json({ msg: `Asegurado ${dni} no tiene cuotas vencidas` });
+            }
         }
         else {
-            res.json({ msg: `Asegurado ${dni} no tiene cuotas vencidas` });
+            res.status(400).json({
+                msg: `No existe Cliente ${dni}`
+            });
         }
     }
     else {
         res.status(400).json({
-            msg: `No existe Cliente ${dni}`
+            msg: `Número de DNI inválido`
         });
     }
 });
-exports.getCuotasVencidas = getCuotasVencidas;
+exports.verificarCuotasVencidas = verificarCuotasVencidas;
 // @desc    Get Pólizas con ID del Cliente
 // @route   GET /api/polizas/cliente/:id
 // @access  Private

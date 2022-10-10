@@ -3,7 +3,7 @@ import { Cliente } from "../models/dataBase/cliente";
 import { Cobertura } from "../models/dataBase/cobertura";
 import { EstadoCuota, ICuota, IPoliza, Poliza } from "../models/dataBase/poliza";
 import { VehiculoAsegurado } from "../models/dataBase/vehiculoAsegurado";
-import { patenteValida } from "../utils/verifications";
+import { dniValido, patenteValida } from "../utils/verifications";
 
 // @desc    Get Póliza
 // @route   GET /api/polizas/:numeroPoliza
@@ -31,7 +31,7 @@ export const getPoliza = async (req: Request, res: Response) => {
 // @desc    Get Póliza con patente
 // @route   GET /api/polizas/vehiculoAsegurado/:patente
 // @access  Private
-export const getPolizasVigentesByPatente = async (req: Request, res: Response) => {
+export const verificarPolizasVigentesByPatente = async (req: Request, res: Response) => {
 
     const { patente } = req.params;
 
@@ -51,19 +51,20 @@ export const getPolizasVigentesByPatente = async (req: Request, res: Response) =
                 while (i < polizas.length && !vigente) {
                     if (polizas[i].fechaFin >= today) {
                         vigente = true;
-                        res.json(polizas[i]);
+                        res.status(400).json({
+                            msg: "Ya existe póliza vigente para ese vehículo",
+                            polizaVigente: polizas[i]
+                        });
                     }
                     i++;
                 }
-
-                res.json({ msg: `Vehículo ${patente} sin pólizas vigentes` });
 
             } else {
                 res.json({ msg: `Vehículo ${patente} sin pólizas asociadas` });
             }
 
         } else {
-            res.json({ msg: `No existe Vehículo Asegurado con patente ${patente}` });
+            res.json({ msg: `Vehículo ${patente} sin pólizas asociadas` });
         }
     } else {
         res.status(400).json({
@@ -77,45 +78,56 @@ export const getPolizasVigentesByPatente = async (req: Request, res: Response) =
 // @desc    Get Cuotas vencidas con DNI del Cliente
 // @route   GET /api/polizas/cuotas-vencidas/:dni
 // @access  Private
-export const getCuotasVencidas = async (req: Request, res: Response) => {
+export const verificarCuotasVencidas = async (req: Request, res: Response) => {
 
     const { dni } = req.params;
 
-    const cliente = await Cliente.findOne({ dni });
+    if (dniValido(dni)) {
 
-    if (cliente) {
+        const cliente = await Cliente.findOne({ dni });
 
-        const polizas = await Poliza.find({ cliente: cliente._id });
+        if (cliente) {
 
-        let cuotasVencidas: ICuota[] = [];
-        let i: number = 0;
-        let j: number = 0;
+            const polizas = await Poliza.find({ cliente: cliente._id });
 
-        while (i < polizas.length) {
+            let cuotasVencidas: ICuota[] = [];
+            let i: number = 0;
+            let j: number = 0;
 
-            const { cuotas } = polizas[i];
+            while (i < polizas.length) {
 
-            while (j < cuotas.length) {
-                const cuota: ICuota = cuotas[i];
-                if (cuota.estado === EstadoCuota.vencida) {
-                    cuotasVencidas.push(cuota);
+                const { cuotas } = polizas[i];
+
+                while (j < cuotas.length) {
+                    const cuota: ICuota = cuotas[i];
+                    if (cuota.estado === EstadoCuota.vencida) {
+                        cuotasVencidas.push(cuota);
+                    }
+                    j++;
                 }
-                j++;
+                i++;
             }
-            i++;
-        }
 
-        if (cuotasVencidas.length > 0) {
-            res.json(cuotasVencidas);
+            if (cuotasVencidas.length > 0) {
+                res.status(400).json({
+                    msg: `El cliente ${ dni } posee cuotas vencidas`,
+                    cuotasVencidas
+                });
+            } else {
+                res.json({ msg: `Asegurado ${dni} no tiene cuotas vencidas` });
+            }
+
         } else {
-            res.json({ msg: `Asegurado ${dni} no tiene cuotas vencidas` });
+            res.status(400).json({
+                msg: `No existe Cliente ${dni}`
+            });
         }
-
     } else {
         res.status(400).json({
-            msg: `No existe Cliente ${dni}`
+            msg: `Número de DNI inválido`
         });
     }
+
 
 }
 

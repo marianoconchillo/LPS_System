@@ -28,7 +28,6 @@ export const dniValido = (dni: string): boolean => {
 
         if (dni.match(CONTIENE_NUMEROS)) {
             if (dni.length < 7 || dni.length > 8 || dni.length === 0) {
-                console.log(dni.length);
                 esValido = false;
             }
         } else {
@@ -49,8 +48,6 @@ export const patenteValida = (patente: string): boolean => {
     let esValido = true;
 
     if (patente.length >= 6 && patente.length <= 7) {
-
-        console.log(patente.length)
 
         if (patente.length === 6) {
             const letras = patente.slice(0, 3);

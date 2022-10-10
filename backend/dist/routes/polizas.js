@@ -8,10 +8,10 @@ router.route("/")
 router.route("/:numeroPoliza")
     .get(polizas_1.getPoliza);
 router.route("/cuotas-vencidas/:dni")
-    .get(polizas_1.getCuotasVencidas);
+    .get(polizas_1.verificarCuotasVencidas);
 router.route("/cliente/:id")
     .get(polizas_1.getPolizasByIdCliente);
 router.route("/vehiculoAsegurado/:patente")
-    .get(polizas_1.getPolizasVigentesByPatente);
+    .get(polizas_1.verificarPolizasVigentesByPatente);
 exports.default = router;
 //# sourceMappingURL=polizas.js.map

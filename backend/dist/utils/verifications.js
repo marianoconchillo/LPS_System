@@ -25,7 +25,6 @@ const dniValido = (dni) => {
     if (!dni.match(CONTIENTE_LETRAS)) {
         if (dni.match(CONTIENE_NUMEROS)) {
             if (dni.length < 7 || dni.length > 8 || dni.length === 0) {
-                console.log(dni.length);
                 esValido = false;
             }
         }
@@ -44,7 +43,6 @@ const patenteValida = (patente) => {
     // - 7 caracteres (2 letras seguidas de 3 números seguidos de 2 letras)
     let esValido = true;
     if (patente.length >= 6 && patente.length <= 7) {
-        console.log(patente.length);
         if (patente.length === 6) {
             const letras = patente.slice(0, 3);
             const numeros = patente.slice(3, 6);
