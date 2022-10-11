@@ -144,29 +144,36 @@ export const getPolizasByIdCliente = async (req: Request, res: Response) => {
 
     const { id } = req.params;
 
-    const polizas = await Poliza.find({ cliente: id })
-        .populate({
-            path: "productor",
-            populate: { path: "sucursal" }
-        })
-        .populate({
-            path: "cobertura",
-            populate: { path: "daños" }
-        })
-        .populate({
-            path: "vehiculoAsegurado",
-            populate: { path: "tipoVehiculo" }
-        });
+    if (verificarObjectId(id)) {
+        const polizas = await Poliza.find({ cliente: id })
+            .populate({
+                path: "productor",
+                populate: { path: "sucursal" }
+            })
+            .populate({
+                path: "cobertura",
+                populate: { path: "daños" }
+            })
+            .populate({
+                path: "vehiculoAsegurado",
+                populate: { path: "tipoVehiculo" }
+            });
 
-    if (polizas.length > 0) {
+        if (polizas.length > 0) {
 
-        res.json(polizas);
+            res.json(polizas);
 
+        } else {
+            res.status(200).json({
+                msg: `Cliente sin Pólizas`
+            });
+        }
     } else {
         res.status(400).json({
-            msg: `Cliente no encontrado o sin Pólizas`
+            msg: `ObjectID Inválido`
         });
     }
+
 
 }
 

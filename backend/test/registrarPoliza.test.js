@@ -394,7 +394,7 @@ describe("Registrar Póliza - NO EXISTE NINGUNA PÓLIZA ASOCIADA A LA PATENTE", 
 // --------------------------------------------------------------------------------------- //
 // --------------------------------------------------------------------------------------- //
 
-describe.only("Registrar Póliza - HAY PÓLIZAS PERO NO ESTÁN VIGENTES", () => {
+describe("Registrar Póliza - HAY PÓLIZAS PERO NO ESTÁN VIGENTES", () => {
   // ##############
   // ## CAMINO 9 ##
   // ##############

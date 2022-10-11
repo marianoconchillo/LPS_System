@@ -130,25 +130,32 @@ exports.verificarCuotasVencidas = verificarCuotasVencidas;
 // @access  Private
 const getPolizasByIdCliente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const polizas = yield poliza_1.Poliza.find({ cliente: id })
-        .populate({
-        path: "productor",
-        populate: { path: "sucursal" }
-    })
-        .populate({
-        path: "cobertura",
-        populate: { path: "daños" }
-    })
-        .populate({
-        path: "vehiculoAsegurado",
-        populate: { path: "tipoVehiculo" }
-    });
-    if (polizas.length > 0) {
-        res.json(polizas);
+    if ((0, verifications_1.verificarObjectId)(id)) {
+        const polizas = yield poliza_1.Poliza.find({ cliente: id })
+            .populate({
+            path: "productor",
+            populate: { path: "sucursal" }
+        })
+            .populate({
+            path: "cobertura",
+            populate: { path: "daños" }
+        })
+            .populate({
+            path: "vehiculoAsegurado",
+            populate: { path: "tipoVehiculo" }
+        });
+        if (polizas.length > 0) {
+            res.json(polizas);
+        }
+        else {
+            res.status(200).json({
+                msg: `Cliente sin Pólizas`
+            });
+        }
     }
     else {
         res.status(400).json({
-            msg: `Cliente no encontrado o sin Pólizas`
+            msg: `ObjectID Inválido`
         });
     }
 });
