@@ -13,6 +13,7 @@ exports.deleteCobertura = exports.putCobertura = exports.postCobertura = exports
 const cobertura_1 = require("../models/dataBase/cobertura");
 const da_o_1 = require("../models/dataBase/da\u00F1o");
 const tipoVehiculo_1 = require("../models/dataBase/tipoVehiculo");
+const verifications_1 = require("../utils/verifications");
 // @desc    Get Cobertura
 // @route   GET /api/coberturas/:codigoCobertura
 // @access  Private
@@ -36,21 +37,28 @@ exports.getCobertura = getCobertura;
 // @access  Private
 const getCoberturaByTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { marca, modelo, version, anio } = req.params;
-    const tipoVehiculo = yield tipoVehiculo_1.TipoVehiculo.findOne({ marca, modelo, version, año: anio });
-    if (tipoVehiculo) {
-        const coberturas = yield cobertura_1.Cobertura.find({ vehiculos: tipoVehiculo }).populate("daños");
-        if (coberturas.length > 0) {
-            res.json(coberturas);
+    if ((0, verifications_1.verificarTipoVehiculo)(marca, modelo, version, anio)) {
+        const tipoVehiculo = yield tipoVehiculo_1.TipoVehiculo.findOne({ marca, modelo, version, año: anio });
+        if (tipoVehiculo) {
+            const coberturas = yield cobertura_1.Cobertura.find({ vehiculos: tipoVehiculo }).populate("daños");
+            if (coberturas.length > 0) {
+                res.json(coberturas);
+            }
+            else {
+                res.status(400).json({
+                    msg: `No existen coberturas para vehículo ${marca} ${modelo} ${version} ${anio}`
+                });
+            }
         }
         else {
             res.status(400).json({
-                msg: `No existen coberturas para vehículo ${marca} ${modelo} ${version} ${anio}`
+                msg: `No existe Vehículo ${marca} ${modelo} ${version} ${anio}`
             });
         }
     }
     else {
         res.status(400).json({
-            msg: `No existe Vehículo ${marca} ${modelo} ${version} ${anio}`
+            msg: `Tipo Vehículo inválido ${marca} ${modelo} ${version} ${anio}`
         });
     }
 });
@@ -60,11 +68,18 @@ exports.getCoberturaByTipoVehiculo = getCoberturaByTipoVehiculo;
 // @access  Private
 const getCoberturaByIDTipoVehiculo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const tipoVehiculo = yield tipoVehiculo_1.TipoVehiculo.findById(id);
-    if (tipoVehiculo) {
-        const coberturas = yield cobertura_1.Cobertura.find({ vehiculos: tipoVehiculo });
-        if (coberturas.length > 0) {
-            res.json(coberturas);
+    if ((0, verifications_1.verificarObjectId)(id)) {
+        const tipoVehiculo = yield tipoVehiculo_1.TipoVehiculo.findById(id);
+        if (tipoVehiculo) {
+            const coberturas = yield cobertura_1.Cobertura.find({ vehiculos: tipoVehiculo });
+            if (coberturas.length > 0) {
+                res.json(coberturas);
+            }
+            else {
+                res.status(400).json({
+                    msg: `No existen coberturas para ese vehículo`
+                });
+            }
         }
         else {
             res.status(400).json({
@@ -74,7 +89,7 @@ const getCoberturaByIDTipoVehiculo = (req, res) => __awaiter(void 0, void 0, voi
     }
     else {
         res.status(400).json({
-            msg: `No existen coberturas para ese vehículo`
+            msg: `ObjectID Inválido`
         });
     }
 });

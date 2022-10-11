@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteVehiculoAsegurado = exports.putVehiculoAsegurado = exports.postVehiculoAsegurado = exports.getIDTipoVehiculoByID = exports.getVehiculoAsegurado = void 0;
 const tipoVehiculo_1 = require("../models/dataBase/tipoVehiculo");
 const vehiculoAsegurado_1 = require("../models/dataBase/vehiculoAsegurado");
+const verifications_1 = require("../utils/verifications");
 // @desc    Get Vehículo Asegurado
 // @route   GET /api/vehiculosAsegurados/:patente
 // @access  Private
@@ -34,13 +35,20 @@ exports.getVehiculoAsegurado = getVehiculoAsegurado;
 // @access  Private
 const getIDTipoVehiculoByID = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const tipoVehiculo = yield vehiculoAsegurado_1.VehiculoAsegurado.findById(id).populate("tipoVehiculo");
-    if (tipoVehiculo) {
-        res.json({ tipoVehiculo: tipoVehiculo.tipoVehiculo._id });
+    if ((0, verifications_1.verificarObjectId)(id)) {
+        const tipoVehiculo = yield vehiculoAsegurado_1.VehiculoAsegurado.findById(id).populate("tipoVehiculo");
+        if (tipoVehiculo) {
+            res.json({ tipoVehiculo: tipoVehiculo.tipoVehiculo._id });
+        }
+        else {
+            res.status(400).json({
+                msg: `No se pudo encontrar Vehículo Asegurado`
+            });
+        }
     }
     else {
         res.status(400).json({
-            msg: `No se pudo encontrar Vehículo Asegurado`
+            msg: `ObjectID Inválido`
         });
     }
 });
@@ -52,27 +60,35 @@ const postVehiculoAsegurado = (req, res) => __awaiter(void 0, void 0, void 0, fu
     const { body } = req;
     const { patente, color, fotos, vehiculo } = body;
     const { marca, modelo, version, año } = vehiculo;
-    try {
-        const tipoVehiculo = yield tipoVehiculo_1.TipoVehiculo.findOne({ marca, modelo, version, año });
-        if (tipoVehiculo) {
-            const vehiculoAsegurado = new vehiculoAsegurado_1.VehiculoAsegurado({
-                patente,
-                color,
-                fotos,
-                tipoVehiculo: tipoVehiculo._id
-            });
-            yield vehiculoAsegurado.save();
-            res.json(vehiculoAsegurado);
+    if ((0, verifications_1.verificarTipoVehiculo)(marca, modelo, version, año) && (0, verifications_1.patenteValida)(patente)) {
+        try {
+            const tipoVehiculo = yield tipoVehiculo_1.TipoVehiculo.findOne({ marca, modelo, version, año });
+            if (tipoVehiculo) {
+                const vehiculoAsegurado = new vehiculoAsegurado_1.VehiculoAsegurado({
+                    patente,
+                    color,
+                    fotos,
+                    tipoVehiculo: tipoVehiculo._id
+                });
+                yield vehiculoAsegurado.save();
+                res.json(vehiculoAsegurado);
+            }
+            else {
+                res.status(400).json({
+                    msg: `TipoVehiculo no encontrado`
+                });
+            }
         }
-        else {
+        catch (error) {
+            console.log(error);
             res.status(500).json({
-                msg: `TipoVehiculo no encontrado`
+                msg: `Error intentando crear VehículoAsegurado`
             });
         }
     }
-    catch (error) {
-        res.status(500).json({
-            msg: `Error intentando crear VehículoAsegurado`
+    else {
+        res.status(400).json({
+            msg: `Tipo Vehículo inválido ${marca} ${modelo} ${version} ${año}`
         });
     }
 });

@@ -3,7 +3,7 @@ import { Cliente } from "../models/dataBase/cliente";
 import { Cobertura } from "../models/dataBase/cobertura";
 import { EstadoCuota, ICuota, IPoliza, Poliza } from "../models/dataBase/poliza";
 import { VehiculoAsegurado } from "../models/dataBase/vehiculoAsegurado";
-import { dniValido, patenteValida } from "../utils/verifications";
+import { dniValido, patenteValida, verificarObjectId } from "../utils/verifications";
 
 // @desc    Get Póliza
 // @route   GET /api/polizas/:numeroPoliza
@@ -51,13 +51,19 @@ export const verificarPolizasVigentesByPatente = async (req: Request, res: Respo
                 while (i < polizas.length && !vigente) {
                     if (polizas[i].fechaFin >= today) {
                         vigente = true;
-                        res.status(400).json({
-                            msg: "Ya existe póliza vigente para ese vehículo",
-                            polizaVigente: polizas[i]
-                        });
                     }
                     i++;
                 }
+
+                if (vigente) {
+                    res.status(200).json({
+                        msg: "Ya existe póliza vigente para ese vehículo",
+                        polizaVigente: polizas[i]
+                    });
+                } else {
+                    res.json({ msg: `Vehículo ${patente} sin pólizas vigentes`, polizaAntigua: polizas[0] });
+                }
+
 
             } else {
                 res.json({ msg: `Vehículo ${patente} sin pólizas asociadas` });
@@ -109,8 +115,8 @@ export const verificarCuotasVencidas = async (req: Request, res: Response) => {
             }
 
             if (cuotasVencidas.length > 0) {
-                res.status(400).json({
-                    msg: `El cliente ${ dni } posee cuotas vencidas`,
+                res.status(200).json({
+                    msg: `El cliente ${dni} posee cuotas vencidas`,
                     cuotasVencidas
                 });
             } else {
@@ -171,50 +177,61 @@ export const postPoliza = async (req: Request, res: Response) => {
 
     const { productor, cliente, cobertura, vehiculoAsegurado } = req.body;
 
-    const numeroPoliza = await Poliza.countDocuments() + 1;
-    const fechaInicio = new Date();
-    const fechaFin = new Date(new Date().setMonth(fechaInicio.getMonth() + 3));
-    const precioCobertura = await Cobertura.findById(cobertura);
+    if (verificarObjectId(productor) && verificarObjectId(cliente) && verificarObjectId(cobertura) && verificarObjectId(vehiculoAsegurado)) {
 
-    try {
+        const numeroPoliza = await Poliza.countDocuments() + 2;
+        const fechaInicio = new Date();
+        const fechaFin = new Date(new Date().setMonth(fechaInicio.getMonth() + 3));
+        const precioCobertura = await Cobertura.findById(cobertura);
 
-        if (precioCobertura) {
+        try {
 
-            const cuotas: ICuota[] = [];
+            if (precioCobertura) {
 
-            for (let i = 0; i < 3; i++) {
-                const cuota: ICuota = {
-                    numero: i + 1,
-                    estado: EstadoCuota.pagar,
-                    importe: precioCobertura.precio,
-                    fecha: new Date(new Date().setMonth(fechaInicio.getMonth() + i))
+                const cuotas: ICuota[] = [];
+
+                for (let i = 0; i < 3; i++) {
+                    const cuota: ICuota = {
+                        numero: i + 1,
+                        estado: EstadoCuota.pagar,
+                        importe: precioCobertura.precio,
+                        fecha: new Date(new Date().setMonth(fechaInicio.getMonth() + i))
+                    }
+                    cuotas.push(cuota);
                 }
-                cuotas.push(cuota);
+
+                const poliza = new Poliza({
+                    numeroPoliza,
+                    fechaInicio,
+                    fechaFin,
+                    productor,
+                    cliente,
+                    cobertura,
+                    vehiculoAsegurado,
+                    cuotas
+                });
+
+                await poliza.save();
+                res.json({
+                    msg: "Póliza registrada correctamente",
+                    poliza
+                });
+
+            } else {
+                res.status(400).json({
+                    msg: `Error al buscar Cobertura`
+                });
             }
 
-            const poliza = new Poliza({
-                numeroPoliza,
-                fechaInicio,
-                fechaFin,
-                productor,
-                cliente,
-                cobertura,
-                vehiculoAsegurado,
-                cuotas
-            });
-
-            await poliza.save();
-            res.json(poliza);
-
-        } else {
-            res.status(400).json({
-                msg: `Error al buscar Cobertura`
+        } catch (error) {
+            res.status(500).json({
+                msg: `Error intentando crear Póliza`
             });
         }
-
-    } catch (error) {
-        res.status(500).json({
-            msg: `Error intentando crear Póliza`
+    } else {
+        res.status(400).json({
+            msg: `ObjectID Inválido`
         });
     }
+
 }

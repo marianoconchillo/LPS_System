@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patenteValida = exports.dniValido = exports.numeroProductorValido = void 0;
+exports.verificarObjectId = exports.verificarTipoVehiculo = exports.patenteValida = exports.dniValido = exports.numeroProductorValido = void 0;
+const mongoose_1 = __importDefault(require("mongoose"));
 // Expresiones regulares
 const CONTIENE_NUMEROS = "[0-9]+";
 const CONTIENTE_LETRAS = "[a-zA-Z]";
@@ -65,4 +69,54 @@ const patenteValida = (patente) => {
     return esValido;
 };
 exports.patenteValida = patenteValida;
+const verificarTipoVehiculo = (marca, modelo, version, año) => {
+    // Marca    --> cadena con 4 letras como mínimo y 12 como máximo
+    // Modelo   --> cadena con 2 caracteres como mínimo y 16 como máximo
+    // Version  --> cadena alfanumérica de 2 caracteres como máximo y 16 
+    // Año      --> cadena numérica de 4 dígitos mayor o igual a 1990 y menor al año actual (2022)
+    let esValido = true;
+    if (!marca.match(CONTIENE_NUMEROS)) {
+        if (marca.length >= 4 && marca.length <= 12) {
+            if (modelo.length >= 2 && modelo.length <= 16) {
+                if (version.length >= 2 && version.length <= 16) {
+                    if (!año.match(CONTIENTE_LETRAS)) {
+                        const number = Number(año);
+                        const yearToday = new Date().getFullYear();
+                        if (number < 1990 || number > yearToday) {
+                            esValido = false;
+                        }
+                    }
+                }
+                else {
+                    esValido = false;
+                }
+            }
+            else {
+                esValido = false;
+            }
+        }
+        else {
+            esValido = false;
+        }
+    }
+    else {
+        esValido = false;
+    }
+    return esValido;
+};
+exports.verificarTipoVehiculo = verificarTipoVehiculo;
+const verificarObjectId = (id) => {
+    // cadena hexadecimal de 24 símbolos
+    let esValido = true;
+    if (mongoose_1.default.Types.ObjectId.isValid(id)) {
+        if ((String)(new mongoose_1.default.Types.ObjectId(id)) !== id) {
+            esValido = false;
+        }
+    }
+    else {
+        esValido = false;
+    }
+    return esValido;
+};
+exports.verificarObjectId = verificarObjectId;
 //# sourceMappingURL=verifications.js.map

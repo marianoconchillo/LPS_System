@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { TipoVehiculo } from "../models/dataBase/tipoVehiculo";
 import { VehiculoAsegurado } from "../models/dataBase/vehiculoAsegurado";
+import { patenteValida, verificarObjectId, verificarTipoVehiculo } from "../utils/verifications";
 
 // @desc    Get Vehículo Asegurado
 // @route   GET /api/vehiculosAsegurados/:patente
@@ -29,17 +30,24 @@ export const getIDTipoVehiculoByID = async (req: Request, res: Response) => {
 
     const { id } = req.params;
 
-    const tipoVehiculo = await VehiculoAsegurado.findById(id).populate("tipoVehiculo");
+    if (verificarObjectId(id)) {
+        const tipoVehiculo = await VehiculoAsegurado.findById(id).populate("tipoVehiculo");
 
-    if (tipoVehiculo) {
+        if (tipoVehiculo) {
 
-        res.json({ tipoVehiculo: tipoVehiculo.tipoVehiculo._id });
+            res.json({ tipoVehiculo: tipoVehiculo.tipoVehiculo._id });
 
+        } else {
+            res.status(400).json({
+                msg: `No se pudo encontrar Vehículo Asegurado`
+            });
+        }
     } else {
         res.status(400).json({
-            msg: `No se pudo encontrar Vehículo Asegurado`
-        })
+            msg: `ObjectID Inválido`
+        });
     }
+
 
 }
 
@@ -52,34 +60,43 @@ export const postVehiculoAsegurado = async (req: Request, res: Response) => {
     const { patente, color, fotos, vehiculo } = body;
     const { marca, modelo, version, año } = vehiculo;
 
-    try {
+    if (verificarTipoVehiculo(marca, modelo, version, año) && patenteValida(patente)) {
 
-        const tipoVehiculo = await TipoVehiculo.findOne({ marca, modelo, version, año });
+        try {
+            const tipoVehiculo = await TipoVehiculo.findOne({ marca, modelo, version, año });
 
-        if (tipoVehiculo) {
+            if (tipoVehiculo) {
 
-            const vehiculoAsegurado = new VehiculoAsegurado({
-                patente,
-                color,
-                fotos,
-                tipoVehiculo: tipoVehiculo._id
-            })
+                const vehiculoAsegurado = new VehiculoAsegurado({
+                    patente,
+                    color,
+                    fotos,
+                    tipoVehiculo: tipoVehiculo._id
+                })
 
-            await vehiculoAsegurado.save();
-            res.json(vehiculoAsegurado);
+                await vehiculoAsegurado.save();
+                res.json(vehiculoAsegurado);
 
-        } else {
+            } else {
+                res.status(400).json({
+                    msg: `TipoVehiculo no encontrado`
+                });
+            }
+
+
+        } catch (error) {
+            console.log(error)
             res.status(500).json({
-                msg: `TipoVehiculo no encontrado`
+                msg: `Error intentando crear VehículoAsegurado`
             });
         }
-
-
-    } catch (error) {
-        res.status(500).json({
-            msg: `Error intentando crear VehículoAsegurado`
-        });
+    } else {
+        res.status(400).json({
+            msg: `Tipo Vehículo inválido ${marca} ${modelo} ${version} ${año}`
+        })
     }
+
+
 
 }
 

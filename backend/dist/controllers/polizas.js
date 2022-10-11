@@ -51,12 +51,17 @@ const verificarPolizasVigentesByPatente = (req, res) => __awaiter(void 0, void 0
                 while (i < polizas.length && !vigente) {
                     if (polizas[i].fechaFin >= today) {
                         vigente = true;
-                        res.status(400).json({
-                            msg: "Ya existe póliza vigente para ese vehículo",
-                            polizaVigente: polizas[i]
-                        });
                     }
                     i++;
+                }
+                if (vigente) {
+                    res.status(200).json({
+                        msg: "Ya existe póliza vigente para ese vehículo",
+                        polizaVigente: polizas[i]
+                    });
+                }
+                else {
+                    res.json({ msg: `Vehículo ${patente} sin pólizas vigentes`, polizaAntigua: polizas[0] });
                 }
             }
             else {
@@ -98,7 +103,7 @@ const verificarCuotasVencidas = (req, res) => __awaiter(void 0, void 0, void 0, 
                 i++;
             }
             if (cuotasVencidas.length > 0) {
-                res.status(400).json({
+                res.status(200).json({
                     msg: `El cliente ${dni} posee cuotas vencidas`,
                     cuotasVencidas
                 });
@@ -153,44 +158,54 @@ exports.getPolizasByIdCliente = getPolizasByIdCliente;
 // @access  Private
 const postPoliza = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { productor, cliente, cobertura, vehiculoAsegurado } = req.body;
-    const numeroPoliza = (yield poliza_1.Poliza.countDocuments()) + 1;
-    const fechaInicio = new Date();
-    const fechaFin = new Date(new Date().setMonth(fechaInicio.getMonth() + 3));
-    const precioCobertura = yield cobertura_1.Cobertura.findById(cobertura);
-    try {
-        if (precioCobertura) {
-            const cuotas = [];
-            for (let i = 0; i < 3; i++) {
-                const cuota = {
-                    numero: i + 1,
-                    estado: poliza_1.EstadoCuota.pagar,
-                    importe: precioCobertura.precio,
-                    fecha: new Date(new Date().setMonth(fechaInicio.getMonth() + i))
-                };
-                cuotas.push(cuota);
+    if ((0, verifications_1.verificarObjectId)(productor) && (0, verifications_1.verificarObjectId)(cliente) && (0, verifications_1.verificarObjectId)(cobertura) && (0, verifications_1.verificarObjectId)(vehiculoAsegurado)) {
+        const numeroPoliza = (yield poliza_1.Poliza.countDocuments()) + 2;
+        const fechaInicio = new Date();
+        const fechaFin = new Date(new Date().setMonth(fechaInicio.getMonth() + 3));
+        const precioCobertura = yield cobertura_1.Cobertura.findById(cobertura);
+        try {
+            if (precioCobertura) {
+                const cuotas = [];
+                for (let i = 0; i < 3; i++) {
+                    const cuota = {
+                        numero: i + 1,
+                        estado: poliza_1.EstadoCuota.pagar,
+                        importe: precioCobertura.precio,
+                        fecha: new Date(new Date().setMonth(fechaInicio.getMonth() + i))
+                    };
+                    cuotas.push(cuota);
+                }
+                const poliza = new poliza_1.Poliza({
+                    numeroPoliza,
+                    fechaInicio,
+                    fechaFin,
+                    productor,
+                    cliente,
+                    cobertura,
+                    vehiculoAsegurado,
+                    cuotas
+                });
+                yield poliza.save();
+                res.json({
+                    msg: "Póliza registrada correctamente",
+                    poliza
+                });
             }
-            const poliza = new poliza_1.Poliza({
-                numeroPoliza,
-                fechaInicio,
-                fechaFin,
-                productor,
-                cliente,
-                cobertura,
-                vehiculoAsegurado,
-                cuotas
-            });
-            yield poliza.save();
-            res.json(poliza);
+            else {
+                res.status(400).json({
+                    msg: `Error al buscar Cobertura`
+                });
+            }
         }
-        else {
-            res.status(400).json({
-                msg: `Error al buscar Cobertura`
+        catch (error) {
+            res.status(500).json({
+                msg: `Error intentando crear Póliza`
             });
         }
     }
-    catch (error) {
-        res.status(500).json({
-            msg: `Error intentando crear Póliza`
+    else {
+        res.status(400).json({
+            msg: `ObjectID Inválido`
         });
     }
 });

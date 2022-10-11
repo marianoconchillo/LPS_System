@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Cobertura, ICobertura } from "../models/dataBase/cobertura";
 import { Daño } from "../models/dataBase/daño";
 import { TipoVehiculo } from "../models/dataBase/tipoVehiculo";
+import { verificarObjectId, verificarTipoVehiculo } from "../utils/verifications";
 
 // @desc    Get Cobertura
 // @route   GET /api/coberturas/:codigoCobertura
@@ -31,25 +32,32 @@ export const getCoberturaByTipoVehiculo = async (req: Request, res: Response) =>
 
     const { marca, modelo, version, anio } = req.params;
 
-    const tipoVehiculo = await TipoVehiculo.findOne({ marca, modelo, version, año: anio });
+    if (verificarTipoVehiculo(marca, modelo, version, anio)) {
+        const tipoVehiculo = await TipoVehiculo.findOne({ marca, modelo, version, año: anio });
 
-    if (tipoVehiculo) {
+        if (tipoVehiculo) {
 
-        const coberturas = await Cobertura.find({ vehiculos: tipoVehiculo }).populate("daños");
+            const coberturas = await Cobertura.find({ vehiculos: tipoVehiculo }).populate("daños");
 
-        if (coberturas.length > 0) {
-            res.json(coberturas);
+            if (coberturas.length > 0) {
+                res.json(coberturas);
+            } else {
+                res.status(400).json({
+                    msg: `No existen coberturas para vehículo ${marca} ${modelo} ${version} ${anio}`
+                })
+            }
+
         } else {
             res.status(400).json({
-                msg: `No existen coberturas para vehículo ${marca} ${modelo} ${version} ${anio}`
+                msg: `No existe Vehículo ${marca} ${modelo} ${version} ${anio}`
             })
         }
-
     } else {
         res.status(400).json({
-            msg: `No existe Vehículo ${marca} ${modelo} ${version} ${anio}`
+            msg: `Tipo Vehículo inválido ${marca} ${modelo} ${version} ${anio}`
         })
     }
+
 }
 
 // @desc    Get Coberturas por ID TipoVehículo
@@ -59,25 +67,32 @@ export const getCoberturaByIDTipoVehiculo = async (req: Request, res: Response) 
 
     const { id } = req.params;
 
-    const tipoVehiculo = await TipoVehiculo.findById(id);
+    if (verificarObjectId(id)) {
+        const tipoVehiculo = await TipoVehiculo.findById(id);
 
-    if (tipoVehiculo) {
+        if (tipoVehiculo) {
 
-        const coberturas = await Cobertura.find({ vehiculos: tipoVehiculo });
+            const coberturas = await Cobertura.find({ vehiculos: tipoVehiculo });
 
-        if (coberturas.length > 0) {
-            res.json(coberturas);
+            if (coberturas.length > 0) {
+                res.json(coberturas);
+            } else {
+                res.status(400).json({
+                    msg: `No existen coberturas para ese vehículo`
+                })
+            }
+
         } else {
             res.status(400).json({
                 msg: `No existen coberturas para ese vehículo`
             })
         }
-
     } else {
         res.status(400).json({
-            msg: `No existen coberturas para ese vehículo`
+            msg: `ObjectID Inválido`
         })
     }
+
 }
 
 

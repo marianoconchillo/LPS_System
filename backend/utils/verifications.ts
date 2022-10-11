@@ -1,3 +1,5 @@
+import mongoose, { ObjectId } from "mongoose";
+
 // Expresiones regulares
 const CONTIENE_NUMEROS = "[0-9]+";
 const CONTIENTE_LETRAS = "[a-zA-Z]";
@@ -68,6 +70,59 @@ export const patenteValida = (patente: string): boolean => {
     } else {
         esValido = false;
     }
+
+    return esValido;
+}
+
+export const verificarTipoVehiculo = (marca: string, modelo: string, version: string, año: string): boolean => {
+    // Marca    --> cadena con 4 letras como mínimo y 12 como máximo
+    // Modelo   --> cadena con 2 caracteres como mínimo y 16 como máximo
+    // Version  --> cadena alfanumérica de 2 caracteres como máximo y 16 
+    // Año      --> cadena numérica de 4 dígitos mayor o igual a 1990 y menor al año actual (2022)
+
+    let esValido = true;
+
+
+    if (!marca.match(CONTIENE_NUMEROS)) {
+        if (marca.length >= 4 && marca.length <= 12) {
+            if (modelo.length >= 2 && modelo.length <= 16) {
+                if (version.length >= 2 && version.length <= 16) {
+                    if (!año.match(CONTIENTE_LETRAS)) {
+                        const number = Number(año);
+                        const yearToday = new Date().getFullYear();
+                        if (number < 1990 || number > yearToday) {
+                            esValido = false;
+                        }
+                    }
+                } else {
+                    esValido = false;
+                }
+            } else {
+                esValido = false;
+            }
+        } else {
+            esValido = false;
+        }
+    } else {
+        esValido = false;
+    }
+
+    return esValido;
+}
+
+export const verificarObjectId = (id: string): boolean => {
+    // cadena hexadecimal de 24 símbolos
+
+    let esValido = true;
+
+    if (mongoose.Types.ObjectId.isValid(id)) {
+        if ((String)(new mongoose.Types.ObjectId(id)) !== id) {
+            esValido = false;
+        }
+    } else {
+        esValido = false;
+    }
+
 
     return esValido;
 }
