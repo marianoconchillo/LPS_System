@@ -1,9 +1,21 @@
+const axios = require("axios");
+
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const expect = require("chai").expect;
 
 chai.use(chaiHttp);
 const server = "http://localhost:8000";
+
+// Eliminar VehículoAsegurado
+const eliminarVehiculoAsegurado = (patente) => {
+  axios.delete(`http://localhost:8000/api/vehiculosAsegurados/${patente}`);
+};
+
+// Eliminar Póliza
+const eliminarPoliza = (numeroPoliza) => {
+  axios.delete(`http://localhost:8000/api/polizas/${numeroPoliza}`);
+};
 
 describe("Registrar Póliza - Camino Común", () => {
   // ##############
@@ -272,7 +284,7 @@ describe("Registrar Póliza - NO EXISTE NINGUNA PÓLIZA ASOCIADA A LA PATENTE", 
                         const cobertura = res.body[0]._id;
                         // Registro VehículoAsegurado
                         const vehiculoAsegurado = {
-                          patente: "GAQ603",
+                          patente: "GAQ601",
                           color: "Negro",
                           fotos: [],
                           vehiculo: {
@@ -287,7 +299,7 @@ describe("Registrar Póliza - NO EXISTE NINGUNA PÓLIZA ASOCIADA A LA PATENTE", 
                           .post("/api/vehiculosAsegurados")
                           .send(vehiculoAsegurado)
                           .end((err, res) => {
-                            const vehiculoAsegurado = res.body._id;
+                            const vehiculoAsegurado = res.body;
                             // Registro Póliza
                             const poliza = {
                               productor,
@@ -302,6 +314,11 @@ describe("Registrar Póliza - NO EXISTE NINGUNA PÓLIZA ASOCIADA A LA PATENTE", 
                               .end((err, res) => {
                                 expect(res.body).to.be.a("object");
                                 expect(res).to.have.status(400);
+
+                                // Eliminar vehiculoAsegurado
+                                eliminarVehiculoAsegurado(
+                                  vehiculoAsegurado.patente
+                                );
                               });
                           });
                       });
@@ -361,13 +378,13 @@ describe("Registrar Póliza - NO EXISTE NINGUNA PÓLIZA ASOCIADA A LA PATENTE", 
                           .post("/api/vehiculosAsegurados")
                           .send(vehiculoAsegurado)
                           .end((err, res) => {
-                            const vehiculoAsegurado = res.body._id;
+                            const vehiculoAsegurado = res.body;
                             // Registro Póliza
                             const poliza = {
                               productor,
                               cliente,
                               cobertura,
-                              vehiculoAsegurado,
+                              vehiculoAsegurado: vehiculoAsegurado._id,
                             };
                             chai
                               .request(server)
@@ -379,6 +396,14 @@ describe("Registrar Póliza - NO EXISTE NINGUNA PÓLIZA ASOCIADA A LA PATENTE", 
                                   .equal(`Póliza registrada correctamente`);
                                 expect(res.body).to.be.a("object");
                                 expect(res).to.have.status(200);
+
+                                // Eliminar vehiculoAsegurado
+                                eliminarVehiculoAsegurado(
+                                  vehiculoAsegurado.patente
+                                );
+
+                                // Eliminar Póliza
+                                eliminarPoliza(res.body.poliza.numeroPoliza);
                               });
                           });
                       });
@@ -414,12 +439,12 @@ describe("Registrar Póliza - HAY PÓLIZAS PERO NO ESTÁN VIGENTES", () => {
               .request(server)
               .get("/api/polizas/vehiculoAsegurado/LLD399")
               .end((err, res) => {
+                const dni = "21518853";
                 // Verifico cuotas vencidas de cliente con su dni
                 chai
                   .request(server)
-                  .get("/api/polizas/cuotas-vencidas/21518853")
+                  .get(`/api/polizas/cuotas-vencidas/${dni}`)
                   .end((err, res) => {
-                    const dni = "21518853";
                     expect(res.body).to.be.a("object");
                     expect(res.body)
                       .to.have.property("msg")
@@ -451,8 +476,6 @@ describe("Registrar Póliza - HAY PÓLIZAS PERO NO ESTÁN VIGENTES", () => {
               .request(server)
               .get("/api/polizas/vehiculoAsegurado/LLD399")
               .end((err, res) => {
-                const vehiculoAsegurado =
-                  res.body.polizaAntigua.vehiculoAsegurado;
                 // Verifico cuotas vencidas de cliente con su dni
                 chai
                   .request(server)
@@ -647,6 +670,9 @@ describe("Registrar Póliza - HAY PÓLIZAS PERO NO ESTÁN VIGENTES", () => {
                                   .equal(`Póliza registrada correctamente`);
                                 expect(res.body).to.be.a("object");
                                 expect(res).to.have.status(200);
+
+                                // Eliminar Póliza
+                                eliminarPoliza(res.body.poliza.numeroPoliza);
                               });
                           });
                       });

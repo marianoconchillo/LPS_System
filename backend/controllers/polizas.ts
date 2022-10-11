@@ -242,3 +242,33 @@ export const postPoliza = async (req: Request, res: Response) => {
     }
 
 }
+
+// @desc    Delete Cobertura
+// @route   DELETE /api/polizas/:numeroPoliza
+// @access  Private
+export const deletePoliza = async (req: Request, res: Response) => {
+
+    const { numeroPoliza } = req.params;
+
+    try {
+
+        const poliza = await Poliza.findOne({ numeroPoliza });
+
+        if (!poliza) {
+            res.status(400).json({
+                msg: `No existe Póliza con número ${numeroPoliza}`
+            })
+        } else {
+            await poliza.deleteOne({ numeroPoliza });
+            res.json({
+                msg: `Póliza eliminada con éxtio`
+            });
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            msg: `Error intentando eliminar Póliza`
+        });
+    }
+
+}

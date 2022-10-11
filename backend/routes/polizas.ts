@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { verificarCuotasVencidas, getPoliza, verificarPolizasVigentesByPatente, getPolizasByIdCliente, postPoliza } from "../controllers/polizas";
+import { verificarCuotasVencidas, getPoliza, verificarPolizasVigentesByPatente, getPolizasByIdCliente, postPoliza, deletePoliza } from "../controllers/polizas";
 
 const router = Router();
 
@@ -8,7 +8,8 @@ router.route("/")
 
 
 router.route("/:numeroPoliza")
-    .get(getPoliza);
+    .get(getPoliza)
+    .delete(deletePoliza);
 
 router.route("/cuotas-vencidas/:dni")
     .get(verificarCuotasVencidas);

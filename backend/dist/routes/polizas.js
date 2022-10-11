@@ -6,7 +6,8 @@ const router = (0, express_1.Router)();
 router.route("/")
     .post(polizas_1.postPoliza);
 router.route("/:numeroPoliza")
-    .get(polizas_1.getPoliza);
+    .get(polizas_1.getPoliza)
+    .delete(polizas_1.deletePoliza);
 router.route("/cuotas-vencidas/:dni")
     .get(polizas_1.verificarCuotasVencidas);
 router.route("/cliente/:id")

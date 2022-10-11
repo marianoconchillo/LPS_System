@@ -5,7 +5,7 @@ const expect = require("chai").expect;
 chai.use(chaiHttp);
 const server = "http://localhost:8000";
 
-describe.only("Consultar las pólizas de un Cliente", () => {
+describe("Consultar las pólizas de un Cliente", () => {
   // ##############
   // ## CAMINO 1 ##
   // ##############

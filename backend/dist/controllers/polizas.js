@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postPoliza = exports.getPolizasByIdCliente = exports.verificarCuotasVencidas = exports.verificarPolizasVigentesByPatente = exports.getPoliza = void 0;
+exports.deletePoliza = exports.postPoliza = exports.getPolizasByIdCliente = exports.verificarCuotasVencidas = exports.verificarPolizasVigentesByPatente = exports.getPoliza = void 0;
 const cliente_1 = require("../models/dataBase/cliente");
 const cobertura_1 = require("../models/dataBase/cobertura");
 const poliza_1 = require("../models/dataBase/poliza");
@@ -217,4 +217,30 @@ const postPoliza = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.postPoliza = postPoliza;
+// @desc    Delete Cobertura
+// @route   DELETE /api/polizas/:numeroPoliza
+// @access  Private
+const deletePoliza = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { numeroPoliza } = req.params;
+    try {
+        const poliza = yield poliza_1.Poliza.findOne({ numeroPoliza });
+        if (!poliza) {
+            res.status(400).json({
+                msg: `No existe Póliza con número ${numeroPoliza}`
+            });
+        }
+        else {
+            yield poliza.deleteOne({ numeroPoliza });
+            res.json({
+                msg: `Póliza eliminada con éxtio`
+            });
+        }
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: `Error intentando eliminar Póliza`
+        });
+    }
+});
+exports.deletePoliza = deletePoliza;
 //# sourceMappingURL=polizas.js.map

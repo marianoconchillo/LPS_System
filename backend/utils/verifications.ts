@@ -29,7 +29,7 @@ export const dniValido = (dni: string): boolean => {
     if (!dni.match(CONTIENTE_LETRAS)) {
 
         if (dni.match(CONTIENE_NUMEROS)) {
-            if (dni.length < 7 || dni.length > 8 || dni.length === 0) {
+            if (dni.length < 7 || dni.length > 8) {
                 esValido = false;
             }
         } else {
