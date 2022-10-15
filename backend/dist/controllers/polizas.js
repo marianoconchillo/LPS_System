@@ -166,7 +166,7 @@ exports.getPolizasByIdCliente = getPolizasByIdCliente;
 const postPoliza = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { productor, cliente, cobertura, vehiculoAsegurado } = req.body;
     if ((0, verifications_1.verificarObjectId)(productor) && (0, verifications_1.verificarObjectId)(cliente) && (0, verifications_1.verificarObjectId)(cobertura) && (0, verifications_1.verificarObjectId)(vehiculoAsegurado)) {
-        const numeroPoliza = (yield poliza_1.Poliza.countDocuments()) + 2;
+        const numeroPoliza = (yield poliza_1.Poliza.countDocuments()) + 1;
         const fechaInicio = new Date();
         const fechaFin = new Date(new Date().setMonth(fechaInicio.getMonth() + 3));
         const precioCobertura = yield cobertura_1.Cobertura.findById(cobertura);

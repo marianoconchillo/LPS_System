@@ -22,7 +22,7 @@ const poliza_1 = require("../models/dataBase/poliza");
 const importData = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Elimino todo
-        yield deleteMany();
+        // await deleteMany();
         // Inserto Sucursal
         const createdSucursal = yield sucursal_1.Sucursal.insertMany(data_1.sucursal);
         // Inserto Daño

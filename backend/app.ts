@@ -14,3 +14,8 @@ connectDB();
 // Creamos el servidor
 const server = new Server();
 server.listen();
+
+const app = server.getApp();
+
+export { app }
+

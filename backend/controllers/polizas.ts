@@ -186,7 +186,7 @@ export const postPoliza = async (req: Request, res: Response) => {
 
     if (verificarObjectId(productor) && verificarObjectId(cliente) && verificarObjectId(cobertura) && verificarObjectId(vehiculoAsegurado)) {
 
-        const numeroPoliza = await Poliza.countDocuments() + 2;
+        const numeroPoliza = await Poliza.countDocuments() + 1;
         const fechaInicio = new Date();
         const fechaFin = new Date(new Date().setMonth(fechaInicio.getMonth() + 3));
         const precioCobertura = await Cobertura.findById(cobertura);

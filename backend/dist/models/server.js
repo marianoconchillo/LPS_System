@@ -49,6 +49,9 @@ class Server {
             console.log(`Server started on port ${this.port}`);
         });
     }
+    getApp() {
+        return this.app;
+    }
 }
 exports.default = Server;
 //# sourceMappingURL=server.js.map

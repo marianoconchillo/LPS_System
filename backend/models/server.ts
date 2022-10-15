@@ -53,6 +53,10 @@ class Server {
         });
     }
 
+    getApp(): Application {
+        return this.app;
+    }
+
 }
 
 export default Server;

@@ -14,7 +14,7 @@ export const importData = async () => {
     try {
 
         // Elimino todo
-        await deleteMany();
+        // await deleteMany();
 
         // Inserto Sucursal
         const createdSucursal = await Sucursal.insertMany<ISucursal>(sucursal);
