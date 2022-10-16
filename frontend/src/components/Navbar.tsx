@@ -1,46 +1,46 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
 import logo from "../assets/logo.png";
 
-export const Navbar = () => {
+interface Props {
+    visible: boolean,
+    setVisible: (open: boolean) => void;
+}
+
+export const Navbar = ({ visible, setVisible }: Props) => {
+
+    const homeLinks = ["Nosotros", "Contacto"];
+
     return (
-        <nav className="relative container mx-auto p-6 bg-slate-400">
-            <div className="flex items-center justify-between">
-                <div className="pt-2">
-                    <img className="w-20 h-20" src={logo} />
+        <div className='shadow-md w-full fixed top-0 left-0 bg-veryLightBlue'>
+
+            <div className='md:flex items-center justify-between py-6 md:px-20 px-7'>
+
+                <div className="flex items-center justify-between px-6">
+                    <img src={logo} className="w-20 h-20" />
+
+                    <div onClick={() => setVisible(!visible)} className='text-3xl right-8 top-6 cursor-pointer md:hidden'>
+                        <FontAwesomeIcon icon={!visible ? faXmark : faBars} color="white" />
+                    </div>
                 </div>
-                <div className="hidden space-x-6 md:flex">
-                    <a href="#" className="hover:text-darkGrayishBlue">Pricing</a>
-                    <a href="#" className="hover:text-darkGrayishBlue">Product</a>
-                    <a href="#" className="hover:text-darkGrayishBlue">About Us</a>
-                    <a href="#" className="hover:text-darkGrayishBlue">Careers</a>
-                    <a href="#" className="hover:text-darkGrayishBlue">Community</a>
-                </div>
-                <a
-                    href="#"
-                    className="hidden p-3 px-6 pt-2 text-white bg-brightRed rounded-full hover:bg-brightRedLight md:block"
-                >
-                    Get Started
-                </a>
-                <button
-                    id="menu-btn"
-                    className="open block hamburger md:hidden focus:outline-none"
-                >
-                    <span className="hamburger-top"></span>
-                    <span className="hamburger-middle"></span>
-                    <span className="hamburger-bottom"></span>
-                </button>
+
+                <ul className={`md:flex md:items-center md:pb-0 pb-12 md:my-0 my-6 absolute md:static md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-9 ${!visible ? 'top-50 ' : 'top-[-490px]'}`}>
+                    {
+                        homeLinks.map((link) => (
+                            <li key={link} className="md:ml-8 md:my-0 mt-5">
+                                <a href="#" className='hover:text-gray-400 duration-500 md:text-white text-slate-800'>{link}</a>
+                            </li>
+                        ))
+                    }
+                    <button
+                        className="flex items-center bg-white hover:bg-blue hover:text-white duration-500 py-2 px-7 border rounded md:ml-8 md:my-0 mt-5 text-slate-800">
+                        <span>Ingresar</span>
+                    </button>
+                </ul>
+
+
             </div>
-            <div className="md:hidden">
-                <div
-                    id="menu"
-                    className="absolute flex-col items-center self-end hidden py-8 mt-10 space-y-6 font-bold bg-white sm:w-auto sm:self-center left-6 right-6 drop-shadow-md"
-                >
-                    <a href="#">Pricing</a>
-                    <a href="#">Product</a>
-                    <a href="#">About Us</a>
-                    <a href="#">Careers</a>
-                    <a href="#">Community</a>
-                </div>
-            </div>
-        </nav>
+
+        </div>
     )
 }
