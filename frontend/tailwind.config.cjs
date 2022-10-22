@@ -10,6 +10,9 @@ module.exports = {
         darkBlue: "#0e2c52",
         veryDarkBlue: "#001d41",
       },
+      backgroundImage: {
+        "gestiones": "url('src/assets/gestiones.jpg')",
+      },
     },
   },
   plugins: [],

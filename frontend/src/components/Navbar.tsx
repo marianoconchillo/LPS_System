@@ -12,12 +12,12 @@ export const Navbar = ({ visible, setVisible }: Props) => {
     const homeLinks = ["Nosotros", "Contacto"];
 
     return (
-        <div className='shadow-md w-full fixed top-0 left-0 bg-veryLightBlue'>
+        <div className='shadow-2xl w-full sticky z-10 top-0 left-0 bg-veryLightBlue py-3 md:py-6 px-7 md:px-20'>
 
-            <div className='md:flex items-center justify-between py-6 md:px-20 px-7'>
+            <div className='md:flex items-center justify-between'>
 
                 <div className="flex items-center justify-between px-6">
-                    <img src={logo} className="w-20 h-20" />
+                    <img src={logo} className="w-14 h-14 md:w-20 md:h-20" />
 
                     <div onClick={() => setVisible(!visible)} className='text-3xl right-8 top-6 cursor-pointer md:hidden'>
                         <FontAwesomeIcon icon={!visible ? faXmark : faBars} color="white" />
