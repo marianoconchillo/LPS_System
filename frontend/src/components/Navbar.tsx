@@ -1,15 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
 import logo from "../assets/logo.png";
+import { useState } from "react";
 
-interface Props {
-    visible: boolean,
-    setVisible: (open: boolean) => void;
-}
-
-export const Navbar = ({ visible, setVisible }: Props) => {
+export const Navbar = () => {
 
     const homeLinks = ["Nosotros", "Contacto"];
+    const [visible, setVisible] = useState<boolean>(true);
 
     return (
         <div className='shadow-2xl w-full sticky z-10 top-0 left-0 bg-veryLightBlue py-3 md:py-6 px-7 md:px-20'>
@@ -17,14 +14,14 @@ export const Navbar = ({ visible, setVisible }: Props) => {
             <div className='md:flex items-center justify-between'>
 
                 <div className="flex items-center justify-between px-6">
-                    <img src={logo} className="w-14 h-14 md:w-20 md:h-20" />
+                    <img src={logo} className="w-14 h-14 md:w-20 md:h-20" alt="Logo LPS"/>
 
                     <div onClick={() => setVisible(!visible)} className='text-3xl right-8 top-6 cursor-pointer md:hidden'>
                         <FontAwesomeIcon icon={!visible ? faXmark : faBars} color="white" />
                     </div>
                 </div>
 
-                <ul className={`md:flex md:items-center md:pb-0 pb-12 md:my-0 my-6 absolute md:static md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-9 ${!visible ? 'top-50 ' : 'top-[-490px]'}`}>
+                <ul className={`bg-white ${ !visible && "h-screen" } md:bg-transparent md:flex md:items-center md:pb-0 pb-12 md:my-0 my-3 md:h-auto absolute md:static md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-9 ${!visible ? 'top-50 ' : 'top-[-490px]'}`}>
                     {
                         homeLinks.map((link) => (
                             <li key={link} className="md:ml-8 md:my-0 mt-5">
