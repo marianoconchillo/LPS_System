@@ -1,5 +1,10 @@
 import express, { Application } from "express";
 import cors from "cors";
+
+// Swagger
+import { serve, setup } from "swagger-ui-express";
+import { specsSwagger } from "../docs/options";
+
 import clienteRoutes from "../routes/clientes";
 import productorRoutes from "../routes/productores";
 import polizaRoutes from "../routes/polizas";
@@ -22,6 +27,7 @@ class Server {
         sucursales: "/api/sucursales",
         tiposVehiculos: "/api/tiposVehiculos",
         daños: "/api/danios",
+        docs: "/docs"
     }
 
     constructor() {
@@ -40,6 +46,9 @@ class Server {
         this.app.use(this.apiPaths.sucursales, sucursalRoutes);
         this.app.use(this.apiPaths.tiposVehiculos, tipoVehiculoRoutes);
         this.app.use(this.apiPaths.daños, dañoRoutes);
+
+        // Swagger
+        this.app.use(this.apiPaths.docs, serve, setup(specsSwagger));
     }
 
     middlewares() {
