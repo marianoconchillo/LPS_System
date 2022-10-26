@@ -1,6 +1,12 @@
+import { useEffect } from "react";
 import historia from "../assets/historia.jpg";
 
 export const Nosotros = () => {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="container mx-auto py-12 md:pt-16 px-5 flex flex-col items-center">
       <h2 className="text-4xl text-darkBlue text-center">Quiénes Somos</h2>

@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     User,
-    createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     GoogleAuthProvider,
     signInWithPopup,
-    signOut
+    signOut,
+    onAuthStateChanged
 } from "firebase/auth";
 import { AuthContext } from "./AuthContext";
 import { auth } from "../../firebaseSetup";
@@ -16,47 +16,32 @@ interface props {
 
 export const AuthProvider = ({ children }: props) => {
 
-    const [user, setUser] = useState<User>({} as User);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [user, setUser] = useState<User | null>(null);
 
-    const signup = async (email: string, password: string) => {
-        try {
-            return await createUserWithEmailAndPassword(auth, email, password);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    const login = async (email: string, password: string) => {
-        try {
-            return await signInWithEmailAndPassword(auth, email, password);
-        } catch (error) {
-            console.log(error);
-        }
+    const login = (email: string, password: string) => {
+        return signInWithEmailAndPassword(auth, email, password);
     }
 
     const loginWithGoogle = async () => {
-        try {
-            const googleProvider = new GoogleAuthProvider();
-            return await signInWithPopup(auth, googleProvider);
-        } catch (error) {
-            console.log(error);
-        }
+        const googleProvider = new GoogleAuthProvider();
+        return signInWithPopup(auth, googleProvider);
     }
 
-    const logout = async () => {
-        try {
-            return await signOut(auth);
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    const logout = () => signOut(auth);
+
+    useEffect(() => {
+        onAuthStateChanged(auth, currentUser => {
+            if (currentUser) {
+                setUser(currentUser);
+            } else {
+                setUser(null);
+            }
+        })
+    }, []);
 
     return (
         <AuthContext.Provider value={{
             user,
-            loading,
-            signup,
             login,
             loginWithGoogle,
             logout

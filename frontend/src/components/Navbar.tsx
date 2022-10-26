@@ -1,29 +1,44 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
-import logo from "../assets/logo.png";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/authContext/AuthContext";
+import logo from "../assets/logo.png";
 
 export const Navbar = () => {
 
     const navigate = useNavigate();
+
+    const { user, logout } = useContext(AuthContext);
     const homeLinks = ["Nosotros", "Contacto"];
     const [visible, setVisible] = useState<boolean>(true);
 
-    const handleClick = (e: any) => {
+    const preventDefault = (e: any) => {
         e.preventDefault();
         if (!visible) {
             setVisible(true);
         }
+    }
+
+    const handleClick = (e: any) => {
+        preventDefault(e);
         navigate("/");
     }
 
     const handleClickLogin = (e: any) => {
-        e.preventDefault();
-        if (!visible) {
-            setVisible(true);
-        }
+        preventDefault(e);
         navigate("/login");
+    }
+
+    const handleClickLogout = async (e: any) => {
+        preventDefault(e);
+
+        try {
+            await logout();
+            navigate("/");
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
@@ -49,11 +64,21 @@ export const Navbar = () => {
                             </li>
                         ))
                     }
-                    <button
-                        onClick={handleClickLogin}
-                        className="flex items-center bg-white hover:bg-blue hover:text-white duration-500 py-2 px-7 border rounded md:ml-8 md:my-0 mt-5 text-slate-800">
-                        <span>Ingresar</span>
-                    </button>
+                    {
+                        user ? (
+                            <button
+                                onClick={handleClickLogout}
+                                className="flex items-center bg-white hover:bg-blue hover:text-white duration-500 py-2 px-7 border rounded md:ml-8 md:my-0 mt-5 text-slate-800">
+                                <span>Salir</span>
+                            </button>
+                        ) : (
+                            <button
+                                onClick={handleClickLogin}
+                                className="flex items-center bg-white hover:bg-blue hover:text-white duration-500 py-2 px-7 border rounded md:ml-8 md:my-0 mt-5 text-slate-800">
+                                <span>Ingresar</span>
+                            </button>
+                        )
+                    }
                 </ul>
 
 

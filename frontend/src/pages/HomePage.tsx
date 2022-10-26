@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCar, faMotorcycle, faHouse, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import gestiones from "../assets/gestiones.jpg";
@@ -23,6 +24,10 @@ export const HomePage = () => {
             icono: faHouse
         },
     ];
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <div className={`md:visible z-0`}>
