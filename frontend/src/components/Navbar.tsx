@@ -18,6 +18,14 @@ export const Navbar = () => {
         navigate("/");
     }
 
+    const handleClickLogin = (e: any) => {
+        e.preventDefault();
+        if (!visible) {
+            setVisible(true);
+        }
+        navigate("/login");
+    }
+
     return (
         <div className='shadow-2xl w-full sticky z-10 top-0 left-0 bg-veryLightBlue py-3 md:py-6 px-7 md:px-20'>
 
@@ -42,6 +50,7 @@ export const Navbar = () => {
                         ))
                     }
                     <button
+                        onClick={handleClickLogin}
                         className="flex items-center bg-white hover:bg-blue hover:text-white duration-500 py-2 px-7 border rounded md:ml-8 md:my-0 mt-5 text-slate-800">
                         <span>Ingresar</span>
                     </button>
