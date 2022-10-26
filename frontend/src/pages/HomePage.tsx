@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCar, faMotorcycle, faHouse, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import gestiones from "../assets/gestiones.jpg";
+import { NavLink } from "react-router-dom";
 
 interface Boxes {
     nombre: string,
@@ -31,7 +32,7 @@ export const HomePage = () => {
 
     return (
         <div className={`md:visible z-0`}>
-            <div className="relative h-full">
+            <section className="relative h-full">
 
                 {/* Imagen Principal */}
                 <img src={gestiones} className="brightness-90" />
@@ -40,9 +41,11 @@ export const HomePage = () => {
                 <div className="lg:w-1/2 flex flex-col text-center items-center space-y-7 lg:space-y-10 mt-10 lg:absolute lg:top-10 lg:left-10 text-slate-800 lg:text-white">
                     <h3 className="text-2xl lg:text-5xl">TUS <span className="font-semibold">GESTIONES MÁS SIMPLES</span></h3>
                     <h2 className="text-base lg:text-3xl lg:font-light tracking-wide">Descargá tu póliza, aboná y solicitá auxilio mecánico desde la web.</h2>
-                    <button className="border-veryLightBlue border-2 lg:hover:bg-veryLightBlue lg:hover:text-white lg:duration-500 lg:bg-white lg:border-0 text-slate-800 font-bold py-3 lg:py-4 px-2  w-1/3 rounded-full">
-                        Ingresar
-                    </button>
+                    <NavLink to="/login" className="w-full">
+                        <button className="border-veryLightBlue border-2 lg:hover:bg-veryLightBlue lg:hover:text-white lg:duration-500 lg:bg-white lg:border-0 text-slate-800 font-bold py-3 lg:py-4 px-2  w-1/3 rounded-full">
+                            Ingresar
+                        </button>
+                    </NavLink>
                 </div>
 
                 {/* Nuestros Seguros */}
@@ -67,7 +70,7 @@ export const HomePage = () => {
                     />
                 </div>
 
-            </div>
+            </section>
         </div>
     )
 }

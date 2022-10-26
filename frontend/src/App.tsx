@@ -8,6 +8,7 @@ import { Login } from "./pages/Login";
 import { AuthProvider } from "./context/authContext/AuthProvider";
 import { Productor } from "./pages/Productor";
 import { PrivateRoutes } from "./components/PrivateRoutes";
+import { BuscarPoliza } from "./pages/BuscarPoliza";
 
 export default function App() {
 
@@ -22,6 +23,7 @@ export default function App() {
                     <Route path="login" element={<Login />} />
                     <Route element={<PrivateRoutes />}>
                         <Route path="productor" element={<Productor />} />
+                        <Route path="buscarPoliza" element={<BuscarPoliza />} />
                     </Route>
                 </Routes>
                 <Footer />

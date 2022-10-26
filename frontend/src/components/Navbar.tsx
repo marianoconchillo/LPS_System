@@ -56,31 +56,47 @@ export const Navbar = () => {
 
                 <ul className={`bg-white ${!visible && "h-screen"} md:bg-transparent md:flex md:items-center md:pb-0 pb-12 md:my-0 my-3 md:h-auto absolute md:static md:z-auto z-[-1] left-0 w-full md:w-auto md:pl-0 pl-9 ${!visible ? 'top-50 ' : 'top-[-490px]'}`}>
                     {
-                        homeLinks.map((link) => (
-                            <li key={link} className="md:ml-8 md:my-0 mt-5">
-                                <NavLink to={link.toLocaleLowerCase()} onClick={() => setVisible(true)}>
-                                    <span className='hover:text-gray-400 duration-500 md:text-white text-slate-800'>{link}</span>
-                                </NavLink>
-                            </li>
-                        ))
-                    }
-                    {
-                        user ? (
-                            <button
-                                onClick={handleClickLogout}
-                                className="flex items-center bg-white hover:bg-blue hover:text-white duration-500 py-2 px-7 border rounded md:ml-8 md:my-0 mt-5 text-slate-800">
-                                <span>Salir</span>
-                            </button>
+                        !user ? (
+                            <>
+                                {
+                                    homeLinks.map((link) => (
+                                        <li key={link} className="md:ml-8 md:my-0 mt-5">
+                                            <NavLink
+                                                to={link.toLocaleLowerCase()}
+                                                onClick={() => setVisible(true)}
+                                                style={({ isActive }) => { return { fontWeight: isActive ? "bolder" : "normal" } }}
+                                            >
+                                                <span className='hover:text-gray-400 duration-500 md:text-white text-slate-800'>{link}</span>
+                                            </NavLink>
+                                        </li>
+                                    ))
+                                }
+                                <button
+                                    onClick={handleClickLogin}
+                                    className="flex items-center bg-white hover:bg-blue hover:text-white duration-500 py-2 px-7 border rounded md:ml-8 md:my-0 mt-5 text-slate-800">
+                                    <span>Ingresar</span>
+                                </button>
+                            </>
                         ) : (
-                            <button
-                                onClick={handleClickLogin}
-                                className="flex items-center bg-white hover:bg-blue hover:text-white duration-500 py-2 px-7 border rounded md:ml-8 md:my-0 mt-5 text-slate-800">
-                                <span>Ingresar</span>
-                            </button>
+                            <>
+                                <li className="md:ml-8 md:my-0 mt-5">
+                                    <NavLink
+                                        to="/productor"
+                                        onClick={() => setVisible(true)}
+                                        style={({ isActive }) => { return { fontWeight: isActive ? "bolder" : "normal" } }}
+                                    >
+                                        <span className='hover:text-gray-400 duration-500 md:text-white text-slate-800'>Home</span>
+                                    </NavLink>
+                                </li>
+                                <button
+                                    onClick={handleClickLogout}
+                                    className="flex items-center bg-white hover:bg-blue hover:text-white duration-500 py-2 px-7 border rounded md:ml-8 md:my-0 mt-5 text-slate-800">
+                                    <span>Salir</span>
+                                </button>
+                            </>
                         )
                     }
                 </ul>
-
 
             </div>
 

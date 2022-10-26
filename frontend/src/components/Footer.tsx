@@ -2,7 +2,7 @@ import logo from "../assets/logo.png";
 
 export const Footer = () => {
     return (
-        <footer className="p-4 bg-slate-200 md:bg-white rounded-lg shadow md:px-20 md:pt-20 md:pb-10">
+        <footer className="p-4 bg-slate-200 rounded-lg shadow md:px-20 md:pt-20 md:pb-10">
             <div className="sm:flex sm:items-center sm:justify-between">
                 <a className="flex items-center justify-center mb-4 sm:mb-0">
                     <img src={logo} className="mr-3 h-16" alt="Logo LPS" />

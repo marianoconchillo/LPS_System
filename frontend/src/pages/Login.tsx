@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext/AuthContext";
 import logo from "../assets/logo.png";
 import google from "../assets/google.png";
@@ -14,15 +14,17 @@ export const Login = () => {
 
     const { login, loginWithGoogle, user } = useContext(AuthContext);
 
-    const navigate: NavigateFunction = useNavigate();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     useEffect(() => {
         if (user) {
-            navigate("/productor");
+            return navigate("/productor");
         }
-        window.scrollTo(0, 0);
-    }, [])
-
+    }, [user]);   
 
     const [error, setError] = useState<boolean>(false);
 
@@ -35,7 +37,7 @@ export const Login = () => {
         e.preventDefault();
         try {
             await login(form.email, form.password);
-            navigate("/productores");
+            navigate("/productor");
         } catch (error) {
             setError(true);
         }
@@ -44,7 +46,7 @@ export const Login = () => {
     const handleGoogleSignin = async () => {
         try {
             await loginWithGoogle();
-            navigate("/productores");
+            navigate("/productor");
         } catch (error) {
             setError(true);
         }
