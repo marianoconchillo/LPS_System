@@ -9,6 +9,7 @@ import { AuthProvider } from "./context/authContext/AuthProvider";
 import { Productor } from "./pages/Productor";
 import { PrivateRoutes } from "./components/PrivateRoutes";
 import { BuscarPoliza } from "./pages/BuscarPoliza";
+import { RegistrarPoliza } from "./pages/RegistrarPoliza";
 
 export default function App() {
 
@@ -24,6 +25,7 @@ export default function App() {
                     <Route element={<PrivateRoutes />}>
                         <Route path="productor" element={<Productor />} />
                         <Route path="buscarPoliza" element={<BuscarPoliza />} />
+                        <Route path="registrarPoliza" element={<RegistrarPoliza />} />
                     </Route>
                 </Routes>
                 <Footer />

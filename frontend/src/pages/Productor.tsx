@@ -25,11 +25,13 @@ export const Productor = () => {
           <h5 className="mb-2 text-2xl font-semibold tracking-tight text-white">Registrar Cliente</h5>
           <p className="mb-3 font-normal text-gray-300">Registrar un nuevo cliente en el sistema para luego asociarle una póliza.</p>
         </div>
-        <div className="p-6 max-w-sm rounded-lg border shadow-md bg-veryDarkBlue border-gray-700 cursor-pointer">
-          <FontAwesomeIcon icon={faFileCirclePlus} color="white" size="3x" className="mb-5 inline-block w-full" />
-          <h5 className="mb-2 text-2xl font-semibold tracking-tight text-white">Registrar Póliza</h5>
-          <p className="mb-3 font-normal text-gray-300">Registrar una nueva póliza en el sistema (se necesitarán todos sus datos asociados).</p>
-        </div>
+        <NavLink to="/registrarPoliza">
+          <div className="p-6 max-w-sm rounded-lg border shadow-md bg-veryDarkBlue border-gray-700 cursor-pointer">
+            <FontAwesomeIcon icon={faFileCirclePlus} color="white" size="3x" className="mb-5 inline-block w-full" />
+            <h5 className="mb-2 text-2xl font-semibold tracking-tight text-white">Registrar Póliza</h5>
+            <p className="mb-3 font-normal text-gray-300">Registrar una nueva póliza en el sistema (se necesitarán todos sus datos asociados).</p>
+          </div>
+        </NavLink>
       </div>
     </div>
   )

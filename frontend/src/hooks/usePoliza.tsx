@@ -8,7 +8,7 @@ interface Error {
 
 export const usePoliza = () => {
 
-    const [isLoading, setLoading] = useState(false);
+    const [isLoading, setLoading] = useState<boolean>(false);
     const [polizas, setPolizas] = useState<Polizas[]>();
     const [error, setError] = useState<Error | null>();
 
