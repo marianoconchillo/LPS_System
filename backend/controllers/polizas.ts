@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { Cliente } from "../models/dataBase/cliente";
 import { Cobertura } from "../models/dataBase/cobertura";
-import { EstadoCuota, ICuota, IPoliza, Poliza } from "../models/dataBase/poliza";
+import { EstadoCuota, ICuota, Poliza } from "../models/dataBase/poliza";
 import { VehiculoAsegurado } from "../models/dataBase/vehiculoAsegurado";
 import { dniValido, patenteValida, verificarObjectId } from "../utils/verifications";
 

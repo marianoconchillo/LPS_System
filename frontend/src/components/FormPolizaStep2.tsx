@@ -39,7 +39,7 @@ export const FormPolizaStep2 = ({ setStep }: props) => {
         localStorage.setItem("modelo", form.modelo);
         localStorage.setItem("version", form.version);
         localStorage.setItem("año", form.año);
-        localStorage.setItem("cobertura", form.cobertura);
+        localStorage.setItem("idCobertura", form.cobertura);
         setStep(3);
     }
 

@@ -1,4 +1,4 @@
-import mongoose, { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 
 // Expresiones regulares
 const CONTIENE_NUMEROS = "[0-9]+";

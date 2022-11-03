@@ -9,7 +9,7 @@ interface Boxes {
     icono: IconDefinition
 }
 
-export const HomePage = () => {
+const HomePage = () => {
 
     const boxes: Boxes[] = [
         {
@@ -74,3 +74,5 @@ export const HomePage = () => {
         </div>
     )
 }
+
+export default HomePage;

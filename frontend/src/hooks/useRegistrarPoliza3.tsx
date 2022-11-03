@@ -17,18 +17,30 @@ interface VehiculoAseguradoInsertar {
     }
 }
 
+interface PolizaInsertar {
+    productor: string,
+    cliente: string,
+    cobertura: string,
+    vehiculoAsegurado: string
+}
+
 interface VehiculoInsertado {
     _id: string
 }
 
 export const useRegistrarPoliza3 = () => {
 
-    const [error, setError] = useState<Error | null>();
+    const [errorVehiculoAsegurado, setErrorVehiculoAsegurado] = useState<Error | null>();
+    const [vehiculoCorrecto, setVehiculoCorrecto] = useState<boolean>(false);
+
+    const [errorPoliza, setErrorPoliza] = useState<Error | null>();
+    const [polizaCorrecta, setPolizaCorrecta] = useState<boolean>(false);
+
     const [isLoading, setLoading] = useState<boolean>(false);
 
     const insertarVehiculoAsegurado = async (color: string, fotos: string[]) => {
         try {
-            setError(null);
+            setErrorVehiculoAsegurado(null);
             setLoading(true);
 
             const vehiculoAsegurado: VehiculoAseguradoInsertar = {
@@ -47,15 +59,44 @@ export const useRegistrarPoliza3 = () => {
             const vehiculoInsertado: VehiculoInsertado = resp.data;
 
             setLoading(false);
+            setVehiculoCorrecto(true);
             return vehiculoInsertado._id;
-                        
-
 
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 if (error.response) {
                     const axiosError: Error = error.response.data;
-                    setError(axiosError);
+                    setErrorVehiculoAsegurado(axiosError);
+                }
+            } else {
+                console.log(error)
+            }
+            setLoading(false);
+        }
+    }
+
+    const insertarPoliza = async (vehiculoAsegurado: string) => {
+        try {
+            setErrorPoliza(null);
+            setLoading(true);
+
+            const poliza: PolizaInsertar = {
+                productor: "6349c99968e3e0e1dc084be5",
+                cliente: localStorage.getItem("idCliente") as string,
+                cobertura: localStorage.getItem("idCobertura") as string,
+                vehiculoAsegurado
+            }
+
+            await axios.post(`http://localhost:8000/api/polizas`, poliza);
+
+            setPolizaCorrecta(true);
+            setLoading(false);
+
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                if (error.response) {
+                    const axiosError: Error = error.response.data;
+                    setErrorPoliza(axiosError);
                 }
             } else {
                 console.log(error)
@@ -66,8 +107,12 @@ export const useRegistrarPoliza3 = () => {
 
     return {
         isLoading,
-        error,
-        insertarVehiculoAsegurado
+        errorVehiculoAsegurado,
+        vehiculoCorrecto,
+        errorPoliza,
+        polizaCorrecta,
+        insertarVehiculoAsegurado,
+        insertarPoliza
     }
 }
 

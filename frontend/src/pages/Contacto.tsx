@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 
-export const Contacto = () => {
+const Contacto = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -26,3 +26,5 @@ export const Contacto = () => {
         </div>
     )
 }
+
+export default Contacto;

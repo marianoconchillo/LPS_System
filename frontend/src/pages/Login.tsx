@@ -10,7 +10,7 @@ type FormFields = {
     password: string,
 }
 
-export const Login = () => {
+const Login = () => {
 
     const { login, loginWithGoogle, user } = useContext(AuthContext);
 
@@ -24,7 +24,7 @@ export const Login = () => {
         if (user) {
             return navigate("/productor");
         }
-    }, [user]);   
+    }, [user]);
 
     const [error, setError] = useState<boolean>(false);
 
@@ -33,10 +33,11 @@ export const Login = () => {
         password: "",
     });
 
-    const handleSubmit = async (e: any) => {
+    const handleSubmit = (e: any) => {
         e.preventDefault();
         try {
-            await login(form.email, form.password);
+            login(form.email, form.password);
+            
             navigate("/productor");
         } catch (error) {
             setError(true);
@@ -108,3 +109,5 @@ export const Login = () => {
         </section>
     )
 }
+
+export default Login;

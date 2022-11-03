@@ -32,7 +32,7 @@ const polizaSchema = new Schema<IPoliza>({
     numeroPoliza: { type: Number, required: true, unique: true },
     fechaInicio: { type: Date, required: true },
     fechaFin: { type: Date, required: true },
-    productor: { type: Schema.Types.ObjectId, required: true, ref: "Productor" },
+    productor: { type: Schema.Types.ObjectId, required: false, ref: "Productor" },
     cliente: { type: Schema.Types.ObjectId, required: true, ref: "Cliente" },
     cobertura: { type: Schema.Types.ObjectId, required: true, ref: "Cobertura" },
     vehiculoAsegurado: { type: Schema.Types.ObjectId, required: true, ref: "VehiculoAsegurado" },

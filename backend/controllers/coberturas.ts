@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Cobertura, ICobertura } from "../models/dataBase/cobertura";
+import { Cobertura } from "../models/dataBase/cobertura";
 import { Daño } from "../models/dataBase/daño";
 import { TipoVehiculo } from "../models/dataBase/tipoVehiculo";
 import { verificarObjectId, verificarTipoVehiculo } from "../utils/verifications";

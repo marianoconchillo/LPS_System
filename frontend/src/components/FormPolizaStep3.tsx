@@ -1,4 +1,5 @@
 import { DotWave } from '@uiball/loaders'
+import { useEffect } from 'react';
 import { useForm } from "../hooks/useForm";
 import { useRegistrarPoliza3 } from '../hooks/useRegistrarPoliza3';
 import { Steps } from '../pages/RegistrarPoliza';
@@ -14,7 +15,15 @@ type FormFields = {
 
 export const FormPolizaStep3 = ({ setStep }: props) => {
 
-    const { isLoading, error, insertarVehiculoAsegurado } = useRegistrarPoliza3();
+    const {
+        isLoading,
+        errorVehiculoAsegurado,
+        errorPoliza,
+        vehiculoCorrecto,
+        polizaCorrecta,
+        insertarVehiculoAsegurado,
+        insertarPoliza
+    } = useRegistrarPoliza3();
 
     const { state: form, onChange } = useForm<FormFields>({
         color: "",
@@ -24,8 +33,16 @@ export const FormPolizaStep3 = ({ setStep }: props) => {
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         const idVehiculoAsegurado = await insertarVehiculoAsegurado(form.color, form.fotos);
-        console.log(idVehiculoAsegurado);
+        if (idVehiculoAsegurado) {
+            await insertarPoliza(idVehiculoAsegurado);
+        }
     }
+
+    useEffect(() => {
+        if (vehiculoCorrecto && polizaCorrecta) {
+            setStep(4);
+        }
+    }, [vehiculoCorrecto, polizaCorrecta]);
 
     return (
         <form className="space-y-4 md:space-y-6 py-10 px-12" onSubmit={handleSubmit}>
@@ -49,7 +66,8 @@ export const FormPolizaStep3 = ({ setStep }: props) => {
                     onChange={(value) => onChange(value.target.value, "fotos")}
                 />
             </div>
-            {error && <div className="text-center text-red-600 my-2">{error.msg}</div>}
+            {errorVehiculoAsegurado && <div className="text-center text-red-600 my-2">{errorVehiculoAsegurado.msg}</div>}
+            {errorPoliza && <div className="text-center text-red-600 my-2">{errorPoliza.msg}</div>}
             <button className="w-full text-white bg-blue hover:bg-veryLightBlue font-medium rounded-lg text-sm px-5 py-2.5 text-center">Registrar Póliza</button>
             {isLoading && (<div className="my-10 flex justify-center"><DotWave color="#1b3b62" /></div>)}
         </form>

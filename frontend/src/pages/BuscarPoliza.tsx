@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { DotWave } from '@uiball/loaders'
@@ -9,7 +10,11 @@ type FormFields = {
     dni: string,
 }
 
-export const BuscarPoliza = () => {
+const BuscarPoliza = () => {
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const { state: form, onChange } = useForm<FormFields>({
         dni: ""
@@ -45,3 +50,5 @@ export const BuscarPoliza = () => {
         </div>
     )
 }
+
+export default BuscarPoliza;

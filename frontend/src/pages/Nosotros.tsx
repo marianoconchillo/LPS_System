@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import historia from "../assets/historia.jpg";
 
-export const Nosotros = () => {
+const Nosotros = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -21,3 +21,5 @@ export const Nosotros = () => {
     </div>
   )
 }
+
+export default Nosotros;

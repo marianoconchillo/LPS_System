@@ -42,6 +42,7 @@ export const useRegistrarPoliza = () => {
                 if (cuotasVencidas.cuotasVencidas) {
                     setErrorDni({ msg: "El cliente posee cuotas vencidas" });
                 } else {
+                    localStorage.setItem("idCliente", cliente._id);
                     setDniCorrecto(true);
                 }
             }

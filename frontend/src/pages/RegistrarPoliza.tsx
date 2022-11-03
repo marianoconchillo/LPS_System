@@ -1,11 +1,16 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FormPolizaStep1 } from "../components/FormPolizaStep1"
 import { FormPolizaStep2 } from "../components/FormPolizaStep2";
 import { FormPolizaStep3 } from "../components/FormPolizaStep3";
+import { FormPolizaStep4 } from "../components/FormPolizaStep4";
 
 export type Steps = 1 | 2 | 3 | 4;
 
-export const RegistrarPoliza = () => {
+const RegistrarPoliza = () => {
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const [step, setStep] = useState<Steps>(1);
 
@@ -17,9 +22,12 @@ export const RegistrarPoliza = () => {
                 {
                     step === 1 ? <FormPolizaStep1 setStep={setStep} /> :
                         step === 2 ? <FormPolizaStep2 setStep={setStep} /> :
-                            step === 3 ? <FormPolizaStep3 setStep={setStep} /> : <></>
+                            step === 3 ? <FormPolizaStep3 setStep={setStep} /> :
+                                <FormPolizaStep4 />
                 }
             </div>
         </div>
     )
 }
+
+export default RegistrarPoliza;
