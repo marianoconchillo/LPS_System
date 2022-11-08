@@ -1,0 +1,477 @@
+openapi: 3.0.1
+info:
+  title: LPS
+  description: Especificación de API
+  version: "0.1"
+servers:
+  - url: https://lps-system.herokuapp.com
+paths:
+  /api/clientes/{dni}:
+    get:
+      description: Auto generated using Swagger Inspector
+      parameters:
+        - name: dni
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Cliente"
+        "400":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/vehiculosAsegurados/tipoVehiculo/{idVehiculoAsegurado}:
+    get:
+      description: Auto generated using Swagger Inspector
+      parameters:
+        - name: idVehiculoAsegurado
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  tipoVehiculo:
+                    type: string
+        "400":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/coberturas/{marca}/{modelo}/{version}/{anio}:
+    get:
+      description: Auto generated using Swagger Inspector
+      parameters:
+        - name: marca
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: modelo
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: anio
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Coberturas"
+        "400":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/polizas/vehiculoAsegurado/{patenteVehiculoAsegurado}:
+    get:
+      description: Auto generated using Swagger Inspector
+      parameters:
+        - name: patenteVehiculoAsegurado
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "400":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/vehiculosAsegurados:
+    post:
+      description: Auto generated using Swagger Inspector
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                color:
+                  type: string
+                vehiculo:
+                  type: object
+                  properties:
+                    marca:
+                      type: string
+                    modelo:
+                      type: string
+                    version:
+                      type: string
+                    año:
+                      type: string
+                fotos:
+                  type: array
+                  items:
+                    type: string
+                patente:
+                  type: string
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/VehiculoAsegurado"
+        "400":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/polizas/cliente/{idCliente}:
+    get:
+      description: Auto generated using Swagger Inspector
+      parameters:
+        - name: idCliente
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Polizas"
+        "400":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/polizas/cuotas-vencidas/{dniCliente}:
+    get:
+      description: Auto generated using Swagger Inspector
+      parameters:
+        - name: dniCliente
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/CuotasVencidas"
+                  - $ref: "#/components/schemas/Error"
+        "400":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/productores/{numeroProductor}:
+    get:
+      description: Auto generated using Swagger Inspector
+      parameters:
+        - name: numeroProductor
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Productor"
+        "400":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/coberturas/tipoVehiculo/{idTipoVehiculo}:
+    get:
+      description: Auto generated using Swagger Inspector
+      parameters:
+        - name: idTipoVehiculo
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Coberturas"
+        "400":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/polizas:
+    post:
+      description: Auto generated using Swagger Inspector
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cliente:
+                  type: string
+                cobertura:
+                  type: string
+                productor:
+                  type: string
+                vehiculoAsegurado:
+                  type: string
+      responses:
+        "200":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: object
+        "400":
+          description: Auto generated using Swagger Inspector
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: object
+components:
+  schemas:
+    Cliente:
+      type: object
+      required:
+        - _id
+        - fechaNacimiento
+        - estadoCivil
+        - nombre
+        - apellido
+        - dni
+        - email
+        - __v
+      properties:
+        _id:
+          type: string
+        fechaNacimiento:
+          type: string
+        estadoCivil:
+          type: string
+        nombre:
+          type: string
+        apellido:
+          type: string
+        dni:
+          type: string
+        email:
+          type: string
+        __v:
+          type: integer
+    Error:
+      type: object
+      required:
+        - msg
+      properties:
+        msg:
+          type: string
+    Cobertura:
+      type: object
+      properties:
+        _id:
+          type: string
+        codigoCobertura:
+          type: string
+        precio:
+          type: string
+        vehiculos:
+          type: array
+          items:
+            type: string
+        daños:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+              nombre:
+                type: string
+              porcentaje:
+                type: string
+              descripcion:
+                type: string
+              __v:
+                type: integer
+        __v:
+          type: integer
+    Coberturas:
+      type: array
+      items:
+        $ref: '#/components/schemas/Cobertura'
+    VehiculoAsegurado:
+      type: object
+      properties:
+        patente:
+          type: string
+        color:
+          type: string
+        fotos:
+          type: array
+          items:
+            type: string
+        tipoVehiculo:
+          type: string
+        _id:
+          type: string
+        __v:
+          type: integer
+    Productor:
+      type: object
+      properties:
+        _id:
+          type: string
+        numeroProductor:
+          type: integer
+        sucursal:
+          type: object
+          properties:
+            _id:
+              type: string
+            numero:
+              type: integer
+            direccion:
+              type: string
+            localidad:
+              type: object
+              properties:
+                nombre:
+                  type: string
+                provincia:
+                  type: string
+                CP:
+                  type: string
+                _id:
+                  type: string
+            __v:
+              type: integer
+        nombre:
+          type: string
+        apellido:
+          type: string
+        dni:
+          type: string
+        email:
+          type: string
+        __v:
+          type: integer
+    Cuota:
+      type: object
+      properties:
+        numero:
+          type: integer
+        fecha:
+          type: string
+        importe:
+          type: string
+        estado:
+          type: string
+        _id:
+          type: string
+    Polizas:
+      type: array
+      items:
+        type: object
+        properties:
+          _id:
+            type: string
+          numeroPoliza:
+            type: integer
+          fechaInicio:
+            type: string
+          fechaFin:
+            type: string
+          productor:
+            $ref: '#/components/schemas/Productor'
+          cliente:
+            type: string
+          cobertura:
+            $ref: '#/components/schemas/Cobertura'
+          vehiculoAsegurado:
+            type: object
+            properties:
+              _id:
+                type: string
+              patente:
+                type: string
+              color:
+                type: string
+              fotos:
+                type: array
+                items:
+                  type: string
+              __v:
+                type: integer
+              tipoVehiculo:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  marca:
+                    type: string
+                  modelo:
+                    type: string
+                  version:
+                    type: string
+                  año:
+                    type: string
+                  __v:
+                    type: integer
+              cuotas:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cuota'
+    CuotasVencidas:
+      type: object
+      properties:
+        msg:
+          type: string
+        cuotasVencidas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cuota'
