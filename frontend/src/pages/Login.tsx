@@ -4,11 +4,13 @@ import { AuthContext } from "../context/authContext/AuthContext";
 import logo from "../assets/logo.png";
 import google from "../assets/google.png";
 import { useForm } from "../hooks/useForm";
+import { LoginForm } from "../components/LoginForm";
 
-type FormFields = {
+export type FormFields = {
     email: string,
     password: string,
 }
+
 
 const Login = () => {
 
@@ -16,9 +18,9 @@ const Login = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
+    // useEffect(() => {
+    //     window.scrollTo(0, 0);
+    // }, []);
 
     useEffect(() => {
         if (user) {
@@ -33,11 +35,10 @@ const Login = () => {
         password: "",
     });
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
         try {
-            login(form.email, form.password);
-            
+            await login(form.email, form.password);
             navigate("/productor");
         } catch (error) {
             setError(true);
@@ -73,36 +74,7 @@ const Login = () => {
                             <p className="">o</p>
                             <hr className="bg-veryLightBlue border-2 w-5/12" />
                         </div>
-                        <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-                            <div>
-                                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">Tu email</label>
-                                <input
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                                    type="email"
-                                    name="email"
-                                    id="email"
-                                    placeholder="name@company.com"
-                                    required={true}
-                                    onChange={(value) => onChange(value.target.value, "email")}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">Contraseña</label>
-                                <input
-                                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                                    type="password"
-                                    name="password"
-                                    id="password"
-                                    placeholder="••••••••"
-                                    required={true}
-                                    onChange={(value) => onChange(value.target.value, "password")}
-                                />
-                            </div>
-                            <button className="w-full text-white bg-blue hover:bg-veryLightBlue font-medium rounded-lg text-sm px-5 py-2.5 text-center">Iniciar Sesión</button>
-                            {
-                                error && <div className="text-center text-red-600">Error de credenciales, intente nuevamente.</div>
-                            }
-                        </form>
+                        <LoginForm handleSubmit={handleSubmit} onChange={onChange} error={error} form={form} />
                     </div>
                 </div>
             </div>
