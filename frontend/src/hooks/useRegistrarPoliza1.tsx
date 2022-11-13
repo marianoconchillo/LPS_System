@@ -1,6 +1,5 @@
-import axios from "axios";
 import { useState } from "react";
-import { Cliente } from "../interfaces/interfaces";
+import { DefaultService, CuotasVencidas, Cliente, ApiError } from "../../generated/index";
 
 interface Error {
     msg: string;
@@ -8,11 +7,6 @@ interface Error {
 
 interface VerificacionPoliza {
     msg: string
-}
-
-interface CuotasVencidas {
-    msg: string;
-    cuotasVencidas?: []
 }
 
 const POLIZA_VIGENTE: string = "Ya existe póliza vigente para ese vehículo";
@@ -33,12 +27,10 @@ export const useRegistrarPoliza = () => {
             setLoading(true);
             setDniCorrecto(false);
 
-            let resp = await axios.get(`http://localhost:8000/api/clientes/${dni}`);
-            const cliente: Cliente = resp.data;
+            const cliente: Cliente = await DefaultService.getApiClientes(dni);
 
             if (cliente) {
-                resp = await axios.get(`http://localhost:8000/api/polizas/cuotas-vencidas/${dni}`);
-                const cuotasVencidas: CuotasVencidas = resp.data;
+                const cuotasVencidas: CuotasVencidas = await DefaultService.getApiPolizasCuotasVencidas(dni);
                 if (cuotasVencidas.cuotasVencidas) {
                     setErrorDni({ msg: "El cliente posee cuotas vencidas" });
                 } else {
@@ -49,11 +41,8 @@ export const useRegistrarPoliza = () => {
             setLoading(false);
 
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.response) {
-                    const axiosError: Error = error.response.data;
-                    setErrorDni(axiosError);
-                }
+            if (error instanceof ApiError) {
+                setErrorDni(error.body);
             } else {
                 console.log(error)
             }
@@ -67,9 +56,7 @@ export const useRegistrarPoliza = () => {
             setLoading(true);
             setPatenteCorrecta(false);
 
-            let resp = await axios.get(`http://localhost:8000/api/polizas/vehiculoAsegurado/${patente}`);
-            const verificacionPatente: VerificacionPoliza = resp.data;
-
+            const verificacionPatente: VerificacionPoliza = await DefaultService.getApiPolizasVehiculoAsegurado(patente);
 
             if (verificacionPatente.msg === POLIZA_VIGENTE) {
                 setErrorPatente({ msg: POLIZA_VIGENTE });
@@ -80,11 +67,8 @@ export const useRegistrarPoliza = () => {
             setLoading(false);
 
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.response) {
-                    const axiosError: Error = error.response.data;
-                    setErrorPatente(axiosError);
-                }
+            if (error instanceof ApiError) {
+                setErrorPatente(error.body);
             } else {
                 console.log(error)
             }

@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom"
-import { Polizas } from "../interfaces/interfaces"
+import { Polizas } from "../../generated/index";
 
 interface Props {
-    polizas: Polizas[]
+    polizas: Polizas
 }
 
 export const Table = ({ polizas }: Props) => {
@@ -32,18 +32,18 @@ export const Table = ({ polizas }: Props) => {
                 <tbody>
                     {
                         polizas.map((poliza) => (
-                            <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                            <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700" key={poliza._id}>
                                 <th scope="row" className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {poliza.numeroPoliza}
                                 </th>
                                 <td className="py-4 px-6">
-                                    N°{poliza.cobertura.codigoCobertura} - ${poliza.cobertura.precio}
+                                    N°{poliza.cobertura?.codigoCobertura} - ${poliza.cobertura?.precio}
                                 </td>
                                 <td className="py-4 px-6">
-                                    {`${ poliza.vehiculoAsegurado.tipoVehiculo.marca} - ${ poliza.vehiculoAsegurado.tipoVehiculo.modelo } - ${ poliza.vehiculoAsegurado.tipoVehiculo.version } - ${ poliza.vehiculoAsegurado.tipoVehiculo.año }`}
+                                    {`${poliza.vehiculoAsegurado?.tipoVehiculo?.marca} - ${poliza.vehiculoAsegurado?.tipoVehiculo?.modelo} - ${poliza.vehiculoAsegurado?.tipoVehiculo?.version} - ${poliza.vehiculoAsegurado?.tipoVehiculo?.año}`}
                                 </td>
                                 <td className="py-4 px-6">
-                                    {poliza.vehiculoAsegurado.patente}
+                                    {poliza.vehiculoAsegurado?.patente}
                                 </td>
                                 <td className="py-4 px-6">
                                     <NavLink to="/" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">

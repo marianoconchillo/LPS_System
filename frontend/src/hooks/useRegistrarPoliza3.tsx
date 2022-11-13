@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { DefaultService, Coberturas, ApiError } from "../../generated/index";
 
 interface Error {
     msg: string;
@@ -22,10 +23,6 @@ interface PolizaInsertar {
     cliente: string,
     cobertura: string,
     vehiculoAsegurado: string
-}
-
-interface VehiculoInsertado {
-    _id: string
 }
 
 export const useRegistrarPoliza3 = () => {
@@ -55,19 +52,15 @@ export const useRegistrarPoliza3 = () => {
                 }
             }
 
-            let resp = await axios.post(`http://localhost:8000/api/vehiculosAsegurados`, vehiculoAsegurado);
-            const vehiculoInsertado: VehiculoInsertado = resp.data;
+            const vehiculoInsertado = await DefaultService.postApiVehiculosAsegurados(vehiculoAsegurado);
 
             setLoading(false);
             setVehiculoCorrecto(true);
             return vehiculoInsertado._id;
 
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.response) {
-                    const axiosError: Error = error.response.data;
-                    setErrorVehiculoAsegurado(axiosError);
-                }
+            if (error instanceof ApiError) {
+                setErrorVehiculoAsegurado(error.body);
             } else {
                 console.log(error)
             }
@@ -87,17 +80,14 @@ export const useRegistrarPoliza3 = () => {
                 vehiculoAsegurado
             }
 
-            await axios.post(`http://localhost:8000/api/polizas`, poliza);
+            DefaultService.postApiPolizas(poliza);
 
             setPolizaCorrecta(true);
             setLoading(false);
 
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.response) {
-                    const axiosError: Error = error.response.data;
-                    setErrorPoliza(axiosError);
-                }
+            if (error instanceof ApiError) {
+                setErrorPoliza(error.body);
             } else {
                 console.log(error)
             }
@@ -115,5 +105,3 @@ export const useRegistrarPoliza3 = () => {
         insertarPoliza
     }
 }
-
-

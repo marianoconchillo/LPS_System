@@ -34,7 +34,7 @@ describe("Login Component tests", () => {
         const handleSubmit = jest.fn(e => e.preventDefault());
         const onChange = jest.fn();
         const error = false;
-        const form = { email: "email", password: "password" };
+        const form = { email: "productor@lps.com.ar", password: "productor" };
 
         const { findByTestId } = render(<LoginForm handleSubmit={handleSubmit} onChange={onChange} error={error} form={form} />);
 

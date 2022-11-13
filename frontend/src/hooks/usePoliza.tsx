@@ -1,6 +1,5 @@
-import axios from "axios";
 import { useState } from "react"
-import { Cliente, Polizas } from "../interfaces/interfaces";
+import { DefaultService, Polizas, Cliente, ApiError } from "../../generated/index";
 
 interface Error {
     msg: string;
@@ -9,7 +8,7 @@ interface Error {
 export const usePoliza = () => {
 
     const [isLoading, setLoading] = useState<boolean>(false);
-    const [polizas, setPolizas] = useState<Polizas[]>();
+    const [polizas, setPolizas] = useState<Polizas>();
     const [error, setError] = useState<Error | null>();
 
     const getPolizaCliente = async (dni: string) => {
@@ -17,20 +16,15 @@ export const usePoliza = () => {
             setError(null);
             setLoading(true);
 
-            let resp = await axios.get(`http://localhost:8000/api/clientes/${dni}`);
-            const cliente: Cliente = resp.data;
+            const cliente: Cliente = await DefaultService.getApiClientes(dni);
 
-            resp = await axios.get(`http://localhost:8000/api/polizas/cliente/${cliente._id}`);
-            const poliza: Polizas[] = resp.data;
+            const poliza: Polizas = await DefaultService.getApiPolizasCliente(cliente._id);
 
             setPolizas(poliza);
 
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (error.response) {
-                    const axiosError: Error = error.response.data;
-                    setError(axiosError);
-                }
+            if (error instanceof ApiError) {
+                setError(error.body);
             } else {
                 console.log(error)
             }
